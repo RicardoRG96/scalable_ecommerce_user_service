@@ -5,6 +5,7 @@ import com.ricardo.scalable.ecommerce.platform.userService.entities.User;
 import com.ricardo.scalable.ecommerce.platform.userService.exceptions.PasswordDoNotMatchException;
 import com.ricardo.scalable.ecommerce.platform.userService.repositories.RoleRepository;
 import com.ricardo.scalable.ecommerce.platform.userService.repositories.UserRepository;
+import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.UserRegisterDto;
 import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.UserUpdateInfoDto;
 import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.UserUpdatePasswordDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private RoleRepository roleRepository;
 
-//    @Autowired
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Override
@@ -54,12 +55,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User save(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+    public User save(UserRegisterDto user) {
+        User userEntity = new User();
+        userEntity.setUsername(user.getUsername());
+        userEntity.setEmail(user.getEmail());
+        userEntity.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        user.setRoles(getRoles(user));
-        user.setEnabled(true);
-        return userRepository.save(user);
+        userEntity.setRoles(getRoles(user));
+        userEntity.setEnabled(true);
+        return userRepository.save(userEntity);
     }
 
     @Override
@@ -140,7 +144,7 @@ public class UserServiceImpl implements UserService {
         }).orElseGet(Optional::empty);
     }
 
-    private List<Role> getRoles(User user) {
+    private List<Role> getRoles(UserRegisterDto user) {
         List<Role> roles = new ArrayList<>();
         Optional<Role> optionalRole = roleRepository.findByName("ROLE_USER");
 

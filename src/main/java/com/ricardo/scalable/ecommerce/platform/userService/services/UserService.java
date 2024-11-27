@@ -2,6 +2,7 @@ package com.ricardo.scalable.ecommerce.platform.userService.services;
 
 import com.ricardo.scalable.ecommerce.platform.userService.entities.User;
 import com.ricardo.scalable.ecommerce.platform.userService.exceptions.PasswordDoNotMatchException;
+import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.UserRegisterDto;
 import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.UserUpdateInfoDto;
 import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.UserUpdatePasswordDto;
 
@@ -17,7 +18,7 @@ public interface UserService {
 
     Iterable<User> findAll();
 
-    User save(User user);
+    User save(UserRegisterDto user);
 
     Optional<User> update(UserUpdateInfoDto userUpdated, Long id);
 

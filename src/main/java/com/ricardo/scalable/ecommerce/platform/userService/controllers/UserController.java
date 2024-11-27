@@ -2,6 +2,7 @@ package com.ricardo.scalable.ecommerce.platform.userService.controllers;
 
 import com.ricardo.scalable.ecommerce.platform.userService.entities.User;
 import com.ricardo.scalable.ecommerce.platform.userService.exceptions.PasswordDoNotMatchException;
+import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.UserRegisterDto;
 import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.UserUpdateInfoDto;
 import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.UserUpdatePasswordDto;
 import com.ricardo.scalable.ecommerce.platform.userService.services.UserService;
@@ -61,13 +62,13 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody User user, BindingResult result) {
+    public ResponseEntity<?> register(@Valid @RequestBody UserRegisterDto user, BindingResult result) {
         user.setAdmin(false);
         return this.createUser(user, result);
     }
 
     @PostMapping
-    public ResponseEntity<?> createUser(@Valid @RequestBody User user, BindingResult result) {
+    public ResponseEntity<?> createUser(@Valid @RequestBody UserRegisterDto user, BindingResult result) {
         if (result.hasErrors()) {
             return validation(result);
         }
@@ -84,7 +85,6 @@ public class UserController {
         return ResponseEntity.badRequest().body(errors);
     }
 
-    // revisar validacion del campo de password, ver como lo puedo ignorar en este endpoint
     @PutMapping("/{id}")
     public ResponseEntity<?> updateUser(
             @Valid @RequestBody UserUpdateInfoDto userUpdated,

@@ -1,6 +1,5 @@
 package com.ricardo.scalable.ecommerce.platform.userService.repositories.dto;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public class UserUpdatePasswordDto {
