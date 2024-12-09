@@ -14,6 +14,15 @@ public class UserUpdateInfoDto {
 
     private Boolean enabled;
 
+    public UserUpdateInfoDto() {
+    }
+
+    public UserUpdateInfoDto(@NotBlank String username, @NotBlank @Email String email, Boolean enabled) {
+        this.username = username;
+        this.email = email;
+        this.enabled = enabled;
+    }
+
     public String getUsername() {
         return username;
     }

@@ -14,6 +14,14 @@ public class Role {
     @NotBlank
     private String name;
 
+    public Role() {
+    }
+
+    public Role(Long id, @NotBlank String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public Long getId() {
         return id;
     }

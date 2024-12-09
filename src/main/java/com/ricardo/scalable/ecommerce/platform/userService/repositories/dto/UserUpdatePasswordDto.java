@@ -10,6 +10,15 @@ public class UserUpdatePasswordDto {
     @Size(min = 6, max = 25)
     private String newPassword;
 
+    public UserUpdatePasswordDto() {
+    }
+
+    public UserUpdatePasswordDto(@Size(min = 6, max = 25) String oldPassword,
+            @Size(min = 6, max = 25) String newPassword) {
+        this.oldPassword = oldPassword;
+        this.newPassword = newPassword;
+    }
+
     public String getOldPassword() {
         return oldPassword;
     }

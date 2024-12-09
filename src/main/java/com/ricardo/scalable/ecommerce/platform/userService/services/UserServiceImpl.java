@@ -88,6 +88,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public Optional<User> updatePassword(UserUpdatePasswordDto userUpdated, Long id)
             throws PasswordDoNotMatchException {
+                
         Optional<User> userOptional = userRepository.findById(id);
 
         if (userOptional.isPresent()) {

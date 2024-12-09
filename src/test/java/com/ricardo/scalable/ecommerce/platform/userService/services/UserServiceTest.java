@@ -2,21 +2,29 @@ package com.ricardo.scalable.ecommerce.platform.userService.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.ricardo.scalable.ecommerce.platform.userService.Data;
+import com.ricardo.scalable.ecommerce.platform.userService.entities.Role;
 import com.ricardo.scalable.ecommerce.platform.userService.entities.User;
+import com.ricardo.scalable.ecommerce.platform.userService.exceptions.PasswordDoNotMatchException;
 
 import org.junit.jupiter.api.Test;
 
+import com.ricardo.scalable.ecommerce.platform.userService.repositories.RoleRepository;
 import com.ricardo.scalable.ecommerce.platform.userService.repositories.UserRepository;
 import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.UserRegisterDto;
+import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.UserUpdateInfoDto;
+import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.UserUpdatePasswordDto;
 
 @SpringBootTest
 public class UserServiceTest {
@@ -24,8 +32,14 @@ public class UserServiceTest {
     @MockitoBean
     UserRepository userRepository;
 
+    @MockitoBean
+    RoleRepository roleRepository;
+
     @Autowired
     UserService userService;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Test
     void testFindById() {
@@ -118,8 +132,9 @@ public class UserServiceTest {
 
     @Test
     void testSave() {
-        User userRequest = Data.createUser001().orElseThrow();
-        when(userRepository.save(userRequest)).thenReturn(Data.userCreated());
+        Role role = new Role(1L, "ROLE_USER");
+        when(userRepository.save(any())).thenReturn(Data.createUser001().orElseThrow());
+        when(roleRepository.findByName("ROLE_USER")).thenReturn(Optional.of(role));
 
         UserRegisterDto userRegisterDto = new UserRegisterDto();
         userRegisterDto.setUsername("ricardo");
@@ -130,14 +145,110 @@ public class UserServiceTest {
         User createdUser = userService.save(userRegisterDto);
 
         assertAll(
-            () -> assertNotNull(createdUser)
-            // () -> assertEquals("ricardo", createdUser.getUsername()),
-            // () -> assertEquals("ricardo@gmail.com", createdUser.getEmail()),
-            // () -> assertTrue(createdUser.isAdmin()),
-            // () -> assertTrue(createdUser.isEnabled()),
-            // () -> assertEquals("ROLE_USER", createdUser.getRoles().getFirst().getName())
+            () -> assertNotNull(createdUser),
+            () -> assertEquals("ricardo", createdUser.getUsername()),
+            () -> assertEquals("ricardo@gmail.com", createdUser.getEmail()),
+            () -> assertFalse(createdUser.isAdmin()),
+            () -> assertTrue(createdUser.isEnabled()),
+            () -> assertEquals("ROLE_USER", createdUser.getRoles().getFirst().getName())
         );
 
-        verify(userRepository).save(userRequest);
+        verify(userRepository).save(any());
+    }
+
+    @Test
+    void testUpdate() {
+        User userUpdated = Data.createUser001().orElseThrow();
+        userUpdated.setUsername("ricardo2");
+        userUpdated.setEmail("ricardo@correo.cl");
+        userUpdated.setEnabled(false);
+
+        when(userRepository.findById(1L)).thenReturn(Data.createUser001());
+        when(userRepository.save(any())).thenReturn(userUpdated);
+
+        UserUpdateInfoDto userUpdateInfoDto = 
+            new UserUpdateInfoDto("ricardo2", "ricardo@correo.cl", false);
+
+        Optional<User> userUpdatedOptional = userService.update(userUpdateInfoDto, 1L);
+
+        assertNotNull(userUpdatedOptional);
+        assertEquals("ricardo2", userUpdatedOptional.orElseThrow().getUsername());
+        assertEquals("ricardo@correo.cl", userUpdatedOptional.orElseThrow().getEmail());
+        assertEquals(false, userUpdatedOptional.orElseThrow().isEnabled());
+
+    }
+
+    @Test
+    void testUpdatePassword() throws PasswordDoNotMatchException {
+        User userUpdatedResponse = Data.createUser001().orElseThrow();
+        userUpdatedResponse.setPassword(passwordEncoder.encode("ricardo123456"));
+
+        User user = Data.createUser001().orElseThrow();
+        user.setPassword(passwordEncoder.encode("ricardo12345"));
+
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(userRepository.save(any())).thenReturn(userUpdatedResponse);
+
+        UserUpdatePasswordDto userUpdatePasswordDto = 
+            new UserUpdatePasswordDto("ricardo12345", "ricardo123456");
+        
+        Optional<User> userOptional = userService.updatePassword(userUpdatePasswordDto, 1L);
+
+        assertTrue(userOptional.isPresent());
+        assertTrue(passwordEncoder.matches("ricardo123456", userOptional.orElseThrow().getPassword()));
+
+    }
+
+    @Test
+    void testUpdatePasswordThrowsException() {
+        User userUpdatedResponse = Data.createUser001().orElseThrow();
+        userUpdatedResponse.setPassword(passwordEncoder.encode("ricardo123456"));
+
+        User user = Data.createUser001().orElseThrow();
+        user.setPassword(passwordEncoder.encode("ricardo12345"));
+
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(userRepository.save(any())).thenReturn(userUpdatedResponse);
+
+        assertThrows(PasswordDoNotMatchException.class, () -> {
+            UserUpdatePasswordDto userUpdatePassword = 
+                new UserUpdatePasswordDto("ricardo", "ricardo123456");
+
+            userService.updatePassword(userUpdatePassword, 1L);
+        });
+    }
+
+    @Test
+    void testAddUserRoles() {
+        User userUpdatedResponse = Data.createUser001().orElseThrow();
+        Role addedRole1 = new Role(2L, "ROLE_ADMIN");
+        Role addedRole2 = new Role(3L, "ROLE_SELLER");
+
+        userUpdatedResponse.getRoles().add(addedRole1);
+        userUpdatedResponse.getRoles().add(addedRole2);
+
+        when(userRepository.findById(1L)).thenReturn(Data.createUser001());
+        when(userRepository.save(any())).thenReturn(userUpdatedResponse);
+
+        User userUpdateRequest = new User();
+        userUpdateRequest.setRoles(
+            List.of(
+                new Role(2L, "ROLE_ADMIN"),
+                new Role(3L, "ROLE_SELLER")
+            )
+        );
+        Optional<User> userOptional = userService.addUserRoles(userUpdateRequest, 1L);
+        List<String> userOptionalRoles = userOptional
+                .orElseThrow()
+                .getRoles()
+                .stream()
+                .map(role -> role.getName())
+                .collect(Collectors.toList());
+
+        assertTrue(userOptional.isPresent());
+        assertEquals(3, userOptional.orElseThrow().getRoles().size());
+        assertTrue(userOptionalRoles.contains("ROLE_ADMIN"));
+        assertTrue(userOptionalRoles.contains("ROLE_SELLER"));
+        assertTrue(userOptionalRoles.contains("ROLE_USER"));
     }
 }   
