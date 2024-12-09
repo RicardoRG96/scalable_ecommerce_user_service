@@ -22,6 +22,9 @@ public class UserRegisterDto {
     @JsonIgnore
     private boolean admin;
 
+    public UserRegisterDto() {
+    }
+
     public @NotBlank String getUsername() {
         return username;
     }
