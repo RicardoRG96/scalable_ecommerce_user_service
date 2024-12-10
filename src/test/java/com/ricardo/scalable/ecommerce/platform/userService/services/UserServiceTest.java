@@ -251,4 +251,34 @@ public class UserServiceTest {
         assertTrue(userOptionalRoles.contains("ROLE_SELLER"));
         assertTrue(userOptionalRoles.contains("ROLE_USER"));
     }
+
+    @Test
+    void testBlockUser() {
+        User mockBlockedUserResponse = Data.createUser001().orElseThrow();
+        mockBlockedUserResponse.setEnabled(false);
+
+        when(userRepository.findById(1L)).thenReturn(Data.createUser001());
+        when(userRepository.save(any())).thenReturn(mockBlockedUserResponse);
+
+        Optional<User> userOptionalRequest = userService.blockUser(1L);
+
+        assertTrue(userOptionalRequest.isPresent());
+        assertEquals("ricardo", userOptionalRequest.orElseThrow().getUsername());
+        assertFalse(userOptionalRequest.orElseThrow().isEnabled());
+    }
+
+    @Test
+    void testUnlockUser() {
+        User mockUserResponse = Data.createUser001().orElseThrow();
+        mockUserResponse.setEnabled(true);
+
+        when(userRepository.findById(1L)).thenReturn(Data.createUser001());
+        when(userRepository.save(any())).thenReturn(mockUserResponse);
+
+        Optional<User> userOptionalRequest = userService.unlockUser(1L);
+
+        assertTrue(userOptionalRequest.isPresent());
+        assertEquals("ricardo", userOptionalRequest.orElseThrow().getUsername());
+        assertTrue(userOptionalRequest.orElseThrow().isEnabled());
+    }
 }   
