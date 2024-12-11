@@ -20,6 +20,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -34,9 +35,6 @@ import org.springframework.core.env.Environment;
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-// @DataJpaTest
-// @TestPropertySource("classpath:application-test.properties")
-// @TestPropertySource("/application-test.properties")
 public class UserControllerTest {
 
     @Autowired
@@ -64,26 +62,33 @@ public class UserControllerTest {
         User user = createUser001();
 
         client.get()
-                .uri("http://localhost:8005/1")
+                .uri("/1")
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
                 .expectBody()
                 .jsonPath("$.username").isEqualTo(user.getUsername())
                 .jsonPath("$.email").isEqualTo(user.getEmail())
-                .jsonPath("$.enabled").isEqualTo(true);
+                .jsonPath("$.enabled").isEqualTo(true)
+                .jsonPath("$.roles").isArray()
+                .jsonPath("$.roles[0].name").isEqualTo("ROLE_USER");
                 // .json(objectMapper.writeValueAsString(user));
     }
 
     private User createUser001() {
         User user = new User();
+        List<Role> roles = new ArrayList<>();
+
+        roles.add(new Role(2L, "ROLE_USER"));
+
         user.setId(1L);
         user.setUsername("alejandro");
         user.setEmail("alejandro@gmail.com");
         user.setPassword("alejandro12345");
         user.setEnabled(true);
         user.setAdmin(false);
-        user.setRoles(List.of(new Role(1L, "ROLE_USER")));
+        // user.setRoles(List.of(new Role(2L, "ROLE_USER")));
+        user.setRoles(roles);
         user.setCreatedAt(Timestamp.from(Instant.now()));
 
         return user;
@@ -96,7 +101,7 @@ public class UserControllerTest {
 
     @Test
     void testApplicationPropertiesFile() {
-        assertEquals("ñacson", env.getProperty("spring.datasource.url"));
+        assertEquals("jdbc:h2:mem:public", env.getProperty("spring.datasource.url"));
     }
 
 }
