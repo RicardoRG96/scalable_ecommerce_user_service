@@ -27,14 +27,14 @@ public class UserRepositoryTest {
         assertTrue(user1.isPresent());
         assertTrue(user2.isPresent());
 
-        assertEquals(user1.orElseThrow().getUsername(), "ricardo2");
-        assertEquals(user2.orElseThrow().getUsername(), "mateo2");
+        assertEquals("alejandro",user1.orElseThrow().getUsername());
+        assertEquals("ester", user2.orElseThrow().getUsername());
 
-        assertFalse(user1.orElseThrow().isEnabled());
-        assertFalse(user2.orElseThrow().isEnabled());
+        assertTrue(user1.orElseThrow().isEnabled());
+        assertTrue(user2.orElseThrow().isEnabled());
 
-        assertTrue(user1.orElseThrow().isAdmin());
-        assertTrue(user2.orElseThrow().isAdmin());
+        assertFalse(user1.orElseThrow().isAdmin());
+        assertFalse(user2.orElseThrow().isAdmin());
     }
 
 }

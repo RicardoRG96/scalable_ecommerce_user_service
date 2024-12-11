@@ -48,6 +48,9 @@ public class User {
     @CreationTimestamp
     private Timestamp createdAt;
 
+    public User() {
+    }
+
     public Long getId() {
         return id;
     }

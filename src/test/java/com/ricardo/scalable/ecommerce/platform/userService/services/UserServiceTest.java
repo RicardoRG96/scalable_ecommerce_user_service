@@ -281,4 +281,5 @@ public class UserServiceTest {
         assertEquals("ricardo", userOptionalRequest.orElseThrow().getUsername());
         assertTrue(userOptionalRequest.orElseThrow().isEnabled());
     }
+    
 }   
