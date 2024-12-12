@@ -120,7 +120,14 @@ public class UserServiceImpl implements UserService {
         Optional<User> userOptional = userRepository.findById(id);
 
         return userOptional.map(dbUser -> {
-            user.getRoles().forEach(role -> dbUser.getRoles().add(role));
+            user.getRoles()
+                .forEach(role -> {
+                    if (role.getName().equals("ROLE_ADMIN")) {
+                        dbUser.setAdmin(true);
+                    }
+                    dbUser.getRoles().add(role);
+                });
+
             return Optional.of(userRepository.save(dbUser));
         }).orElseGet(Optional::empty);
     }

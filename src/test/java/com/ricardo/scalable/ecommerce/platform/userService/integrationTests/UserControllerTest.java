@@ -7,23 +7,21 @@ import org.springframework.test.context.ActiveProfiles;
 
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ricardo.scalable.ecommerce.platform.userService.entities.Role;
 import com.ricardo.scalable.ecommerce.platform.userService.entities.User;
 import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.UserRegisterDto;
+import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.UserUpdateInfoDto;
+import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.UserUpdatePasswordDto;
 
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.*;
 
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.print.attribute.standard.Media;
 
@@ -49,15 +47,9 @@ public class UserControllerTest {
     @Autowired
     private WebTestClient client;
 
-    private Long userIdTest1;
-
-    private Long userIdTest2;
-
     @BeforeEach
     void setUp() {
         objectMapper = new ObjectMapper();
-        userIdTest1 = 1L;
-        userIdTest2 = 2L;
     }
 
     @Test
@@ -202,16 +194,184 @@ public class UserControllerTest {
                     try {
                         JsonNode json = objectMapper.readTree(res.getResponseBody());
                         assertAll(
+                            () -> assertEquals(4L, json.path("id").asLong()),
                             () -> assertNotNull(json),
                             () -> assertEquals("mateo", json.path("username").asText()),
                             () -> assertNotNull(json.path("password").asText()),
                             () -> assertTrue(json.path("enabled").asBoolean()),
                             () -> assertFalse(json.path("admin").asBoolean()),
                             () -> assertNotNull(json.path("roles"))
-                            // () -> assertEquals("ROLE_USERR", json.path("roles"))
                         );
                     } catch (IOException e) {
                         e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(6)
+    void testCreateUser() {
+        UserRegisterDto userRegisterRequest = new UserRegisterDto();
+        userRegisterRequest.setUsername("pepa");
+        userRegisterRequest.setEmail("pepa@gmail.com");
+        userRegisterRequest.setPassword("pepa12345");
+
+        client.post()
+                .uri("/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(userRegisterRequest)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(response -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(response.getResponseBody());
+                        assertAll(
+                            () -> assertEquals(5L, json.path("id").asLong()),
+                            () -> assertNotNull(json),
+                            () -> assertEquals("pepa", json.path("username").asText()),
+                            () -> assertNotNull(json.path("password").asText()),
+                            () -> assertTrue(json.path("enabled").asBoolean()),
+                            () -> assertFalse(json.path("admin").asBoolean()),
+                            () -> assertNotNull(json.path("roles"))
+                        );
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(7)
+    void testUpdateUser() {
+        UserUpdateInfoDto userUpdateRequest = new UserUpdateInfoDto();
+        userUpdateRequest.setUsername("pepona");
+        userUpdateRequest.setEmail("pepona@gmail.com");
+        userUpdateRequest.setEnabled(false);
+
+        client.put()
+                .uri("/5")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(userUpdateRequest)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(response -> {
+                   try {
+                        JsonNode json = objectMapper.readTree(response.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertEquals(5L, json.path("id").asLong()),
+                            () -> assertEquals("pepona", json.path("username").asText()),
+                            () -> assertNotNull(json.path("password").asText()),
+                            () -> assertFalse(json.path("enabled").asBoolean()),
+                            () -> assertFalse(json.path("admin").asBoolean()),
+                            () -> assertNotNull(json.path("roles"))
+                        );
+                   } catch (IOException ex) {
+                    ex.printStackTrace();
+                   } 
+                });
+    }
+
+    @Test
+    @Order(8)
+    void testChangePassword() {
+        UserUpdatePasswordDto userUpdatePasswordRequest = new UserUpdatePasswordDto();
+        userUpdatePasswordRequest.setOldPassword("pepa12345");
+        userUpdatePasswordRequest.setNewPassword("pepona12345");
+
+        client.put()
+                .uri("/change-password/5")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(userUpdatePasswordRequest)
+                .exchange()
+                .expectStatus().isNoContent()
+                .expectBody();
+    }
+    
+    @Test
+    @Order(9)
+    void testChangeUserRoles() {
+        User user = new User();
+        Role adminRole = new Role(1L, "ROLE_ADMIN");
+        Role sellerRole = new Role(3L, "ROLE_SELLER");
+        List<Role> roles = List.of(adminRole, sellerRole);
+
+        user.setRoles(roles);
+
+        client.put()
+                .uri("/roles/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(user)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(response -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(response.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertEquals(1L, json.path("id").asLong()),
+                            () -> assertEquals("alejandro", json.path("username").asText()),
+                            () -> assertTrue(json.path("enabled").asBoolean()),
+                            () -> assertTrue(json.path("admin").asBoolean()),
+                            () -> assertNotNull(json.path("roles")),
+                            () -> assertEquals(3, json.path("roles").size())
+                        );
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(10)
+    void testBlockUser() {
+        client.put()
+                .uri("/block/3")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(response -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(response.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertEquals(3L, json.path("id").asLong()),
+                            () -> assertEquals("pepe", json.path("username").asText()),
+                            () -> assertFalse(json.path("enabled").asBoolean())
+                        );
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(11)
+    void testUnlockUser() {
+        client.put()
+                .uri("/unlock/3")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(response -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(response.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertEquals(3L, json.path("id").asLong()),
+                            () -> assertEquals("pepe", json.path("username").asText()),
+                            () -> assertTrue(json.path("enabled").asBoolean())
+                        );
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
                     }
                 });
     }
