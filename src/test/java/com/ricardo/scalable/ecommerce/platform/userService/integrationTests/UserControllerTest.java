@@ -66,6 +66,13 @@ public class UserControllerTest {
                 .jsonPath("$.enabled").isEqualTo(true)
                 .jsonPath("$.roles").isArray()
                 .jsonPath("$.roles[0].name").isEqualTo("ROLE_USER");
+
+        String notExistingUserId = "50";
+
+        client.get()
+                .uri("/" + notExistingUserId)
+                .exchange()
+                .expectStatus().isNotFound();
     }
 
     private User createUser001() {
@@ -104,6 +111,13 @@ public class UserControllerTest {
                 .jsonPath("$.roles").isArray()
                 .jsonPath("$.roles").isNotEmpty()
                 .jsonPath("$.roles[0].name").isEqualTo("ROLE_USER");
+
+        String notExistingUsername = "example";
+
+        client.get()
+                .uri("/username/" + notExistingUsername)
+                .exchange()
+                .expectStatus().isNotFound();
     }
 
     @Test
@@ -125,6 +139,13 @@ public class UserControllerTest {
                 .jsonPath("$.roles").isNotEmpty()
                 .jsonPath("$.roles").isArray()
                 .jsonPath("$.roles[0].name").isEqualTo("ROLE_USER");
+        
+        String notExistingEmail = "notExisting@example.com";
+
+        client.get()
+                .uri("/email/"+ notExistingEmail)
+                .exchange()
+                .expectStatus().isNotFound();
     }
 
     @Test
@@ -204,6 +225,15 @@ public class UserControllerTest {
                         e.printStackTrace();
                     }
                 });
+
+        UserRegisterDto userRegisterBadRequest = new UserRegisterDto();
+
+        client.post()
+                .uri("/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(userRegisterBadRequest)
+                .exchange()
+                .expectStatus().isBadRequest();
     }
 
     @Test
@@ -238,6 +268,15 @@ public class UserControllerTest {
                         ex.printStackTrace();
                     }
                 });
+
+        UserRegisterDto userRegisterBadRequest = new UserRegisterDto();
+
+        client.post()
+                .uri("/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(userRegisterBadRequest)
+                .exchange()
+                .expectStatus().isBadRequest();
     }
 
     @Test
@@ -272,6 +311,27 @@ public class UserControllerTest {
                     ex.printStackTrace();
                    } 
                 });
+
+        UserUpdateInfoDto userUpdateInfoBadRequest = new UserUpdateInfoDto();
+        userUpdateInfoBadRequest.setUsername("");
+        userUpdateInfoBadRequest.setEmail("example.com");
+        userUpdateInfoBadRequest.setEnabled(true);
+
+        client.put()
+                .uri("/5")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(userUpdateInfoBadRequest)
+                .exchange()
+                .expectStatus().isBadRequest();
+
+        String notExistingUserId = "50";
+
+        client.put()
+                .uri("/" + notExistingUserId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(userUpdateRequest)
+                .exchange()
+                .expectStatus().isNotFound();
     }
 
     @Test
@@ -319,12 +379,12 @@ public class UserControllerTest {
                 .exchange()
                 .expectStatus().isNotFound();
 
-        UserUpdatePasswordDto userUpdatePasswordEmpty = new UserUpdatePasswordDto();
+        UserUpdatePasswordDto userUpdatePasswordWithNullValues = new UserUpdatePasswordDto();
 
         client.put()
                 .uri("/change-password/2")
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(userUpdatePasswordEmpty)
+                .bodyValue(userUpdatePasswordWithNullValues)
                 .exchange()
                 .expectStatus().is5xxServerError();
     }

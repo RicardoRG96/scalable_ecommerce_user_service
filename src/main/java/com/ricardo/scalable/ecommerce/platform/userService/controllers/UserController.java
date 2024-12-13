@@ -111,7 +111,7 @@ public class UserController {
             BindingResult result
     ) {
         if (result.hasErrors()) {
-            this.validation(result);
+            return this.validation(result);
         }
         try {
             Optional<User> userOptional = userService.updatePassword(userUpdated, id);
