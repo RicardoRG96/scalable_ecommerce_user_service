@@ -23,8 +23,6 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.print.attribute.standard.Media;
-
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
@@ -288,8 +286,47 @@ public class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(userUpdatePasswordRequest)
                 .exchange()
-                .expectStatus().isNoContent()
-                .expectBody();
+                .expectStatus().isNoContent();
+
+        UserUpdatePasswordDto userUpdatePasswordUnauthorizedRequest = new UserUpdatePasswordDto();
+        userUpdatePasswordUnauthorizedRequest.setOldPassword("pepa12345");
+        userUpdatePasswordUnauthorizedRequest.setNewPassword("pepona12345");
+
+        client.put()
+                .uri("/change-password/5")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(userUpdatePasswordUnauthorizedRequest)
+                .exchange()
+                .expectStatus().isUnauthorized();
+
+        UserUpdatePasswordDto userUpdatePasswordBadRequest = new UserUpdatePasswordDto();
+        userUpdatePasswordBadRequest.setOldPassword("");
+        userUpdatePasswordBadRequest.setNewPassword("");
+
+        client.put()
+                .uri("/change-password/5")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(userUpdatePasswordBadRequest)
+                .exchange()
+                .expectStatus().isBadRequest();
+
+        String notExistingUserId = "50";
+
+        client.put()
+                .uri("/change-password/" + notExistingUserId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(userUpdatePasswordRequest)
+                .exchange()
+                .expectStatus().isNotFound();
+
+        UserUpdatePasswordDto userUpdatePasswordEmpty = new UserUpdatePasswordDto();
+
+        client.put()
+                .uri("/change-password/2")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(userUpdatePasswordEmpty)
+                .exchange()
+                .expectStatus().is5xxServerError();
     }
     
     @Test
@@ -326,6 +363,22 @@ public class UserControllerTest {
                         ex.printStackTrace();
                     }
                 });
+
+        User userWithoutRoles = new User();
+
+        client.put()
+                .uri("/roles/2")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(userWithoutRoles)
+                .exchange()
+                .expectStatus().is5xxServerError();
+
+        client.put()
+                .uri("/roles/50")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(user)
+                .exchange()
+                .expectStatus().isNotFound();
     }
 
     @Test
@@ -350,6 +403,11 @@ public class UserControllerTest {
                         ex.printStackTrace();
                     }
                 });
+
+        client.put()
+                .uri("/block/50")
+                .exchange()
+                .expectStatus().isNotFound();
     }
 
     @Test
@@ -374,6 +432,42 @@ public class UserControllerTest {
                         ex.printStackTrace();
                     }
                 });
+
+        client.put()
+                .uri("/unlock/50")
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
+    @Order(12)
+    void testDelete() {
+        client.delete()
+                .uri("/5")
+                .exchange()
+                .expectStatus().isNoContent();
+
+        client.get()
+                .uri("/")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(response -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(response.getResponseBody());
+                        assertAll(
+                            () -> assertEquals(4, json.size())
+                        );
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                });
+
+        client.get()
+                .uri("/5")
+                .exchange()
+                .expectStatus().isNotFound();
     }
 
     @Test
