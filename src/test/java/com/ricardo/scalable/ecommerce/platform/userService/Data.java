@@ -19,11 +19,6 @@ public class Data {
     }
 
     public static Optional<User> createUser001() {
-        // List<User> users = createUsers();
-        // return users
-        //     .stream()
-        //     .filter(user -> user.getId() == 1L)
-        //     .findFirst();
         User user1 = new User();
         List<Role> roles = new ArrayList<>();
         Role role = new Role();
@@ -46,11 +41,6 @@ public class Data {
     }
 
     public static Optional<User> createUser002() {
-        // List<User> users = createUsers();
-        // return users
-        //     .stream()
-        //     .filter(user -> user.getId() == 1L)
-        //     .findFirst();
         User user = new User();
         List<Role> roles = new ArrayList<>();
         Role role = new Role();
