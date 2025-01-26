@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -51,8 +52,18 @@ public class UserServiceTest {
 
         assertTrue(user1.isPresent());
         assertTrue(user2.isPresent());
-        assertEquals("ricardo", user1.orElseThrow().getUsername());
-        assertEquals("mateo", user2.orElseThrow().getUsername());
+        assertEquals("ricardo10", user1.orElseThrow().getUsername());
+        assertEquals("mateo10", user2.orElseThrow().getUsername());
+        assertEquals("Ricardo", user1.orElseThrow().getFirstName());
+        assertEquals("avatar1.jpg", user1.orElseThrow().getAvatar());
+        assertEquals("avatar2.jpg", user2.orElseThrow().getAvatar());
+        assertEquals("Mateo", user2.orElseThrow().getFirstName());
+        assertEquals("Retamal", user1.orElseThrow().getLastName());
+        assertEquals("Retamal", user2.orElseThrow().getLastName());
+        assertEquals("+56912345678", user1.orElseThrow().getPhoneNumber());
+        assertEquals("+56987654321", user2.orElseThrow().getPhoneNumber());
+        assertEquals("1996-04-10", user1.orElseThrow().getBirthDate().toString());
+        assertEquals("2024-09-01", user2.orElseThrow().getBirthDate().toString());
         assertEquals(1, user1.orElseThrow().getRoles().size());
         assertEquals(1, user2.orElseThrow().getRoles().size());
         assertEquals("ROLE_USER", user1.orElseThrow().getRoles().getFirst().getName());
@@ -72,10 +83,18 @@ public class UserServiceTest {
 
         assertTrue(user1.isPresent());
         assertTrue(user2.isPresent());
-        assertEquals("ricardo", user1.orElseThrow().getUsername());
-        assertEquals("mateo", user2.orElseThrow().getUsername());
-        assertEquals("ricardo@gmail.com", user1.orElseThrow().getEmail());
-        assertEquals("mateo@gmail.com", user2.orElseThrow().getEmail());
+        assertEquals("ricardo10", user1.orElseThrow().getUsername());
+        assertEquals("mateo10", user2.orElseThrow().getUsername());
+        assertEquals("Ricardo", user1.orElseThrow().getFirstName());
+        assertEquals("avatar1.jpg", user1.orElseThrow().getAvatar());
+        assertEquals("avatar2.jpg", user2.orElseThrow().getAvatar());
+        assertEquals("Mateo", user2.orElseThrow().getFirstName());
+        assertEquals("Retamal", user1.orElseThrow().getLastName());
+        assertEquals("Retamal", user2.orElseThrow().getLastName());
+        assertEquals("+56912345678", user1.orElseThrow().getPhoneNumber());
+        assertEquals("+56987654321", user2.orElseThrow().getPhoneNumber());
+        assertEquals("1996-04-10", user1.orElseThrow().getBirthDate().toString());
+        assertEquals("2024-09-01", user2.orElseThrow().getBirthDate().toString());
         assertEquals(1, user1.orElseThrow().getRoles().size());
         assertEquals(1, user2.orElseThrow().getRoles().size());
         assertEquals("ROLE_USER", user1.orElseThrow().getRoles().getFirst().getName());
@@ -95,10 +114,18 @@ public class UserServiceTest {
 
         assertTrue(user1.isPresent());
         assertTrue(user2.isPresent());
-        assertEquals("ricardo", user1.orElseThrow().getUsername());
-        assertEquals("mateo", user2.orElseThrow().getUsername());
-        assertEquals("ricardo@gmail.com", user1.orElseThrow().getEmail());
-        assertEquals("mateo@gmail.com", user2.orElseThrow().getEmail());
+        assertEquals("ricardo10", user1.orElseThrow().getUsername());
+        assertEquals("mateo10", user2.orElseThrow().getUsername());
+        assertEquals("Ricardo", user1.orElseThrow().getFirstName());
+        assertEquals("avatar1.jpg", user1.orElseThrow().getAvatar());
+        assertEquals("avatar2.jpg", user2.orElseThrow().getAvatar());
+        assertEquals("Mateo", user2.orElseThrow().getFirstName());
+        assertEquals("Retamal", user1.orElseThrow().getLastName());
+        assertEquals("Retamal", user2.orElseThrow().getLastName());
+        assertEquals("+56912345678", user1.orElseThrow().getPhoneNumber());
+        assertEquals("+56987654321", user2.orElseThrow().getPhoneNumber());
+        assertEquals("1996-04-10", user1.orElseThrow().getBirthDate().toString());
+        assertEquals("2024-09-01", user2.orElseThrow().getBirthDate().toString());
         assertEquals(1, user1.orElseThrow().getRoles().size());
         assertEquals(1, user2.orElseThrow().getRoles().size());
         assertEquals("ROLE_USER", user1.orElseThrow().getRoles().getFirst().getName());
@@ -116,10 +143,20 @@ public class UserServiceTest {
 
         assertNotNull(users);
         assertEquals(2, users.size());
-        assertEquals("ricardo", users.get(0).getUsername());
-        assertEquals("mateo", users.get(1).getUsername());
+        assertEquals("avatar1.jpg", users.get(0).getAvatar());
+        assertEquals("avatar2.jpg", users.get(1).getAvatar());
+        assertEquals("Ricardo", users.get(0).getFirstName());
+        assertEquals("Mateo", users.get(1).getFirstName());
+        assertEquals("Retamal", users.get(0).getLastName());
+        assertEquals("Retamal", users.get(1).getLastName());
+        assertEquals("ricardo10", users.get(0).getUsername());
+        assertEquals("mateo10", users.get(1).getUsername());
         assertEquals("ricardo@gmail.com", users.get(0).getEmail());
         assertEquals("mateo@gmail.com", users.get(1).getEmail());
+        assertEquals("+56912345678", users.get(0).getPhoneNumber());
+        assertEquals("+56987654321", users.get(1).getPhoneNumber());
+        assertEquals("1996-04-10", users.get(0).getBirthDate().toString());
+        assertEquals("2024-09-01", users.get(1).getBirthDate().toString());
         assertTrue(users.get(0).isEnabled());
         assertTrue(users.get(1).isEnabled());
         assertEquals(1, users.get(0).getRoles().size());
@@ -137,17 +174,27 @@ public class UserServiceTest {
         when(roleRepository.findByName("ROLE_USER")).thenReturn(Optional.of(role));
 
         UserRegisterDto userRegisterDto = new UserRegisterDto();
-        userRegisterDto.setUsername("ricardo");
+        userRegisterDto.setUsername("ricardo10");
+        userRegisterDto.setAvatar("avatar1.jpg");
+        userRegisterDto.setFirstName("Ricardo");
+        userRegisterDto.setLastName("Retamal");
         userRegisterDto.setEmail("ricardo@gmail.com");
         userRegisterDto.setPassword("ricardo12345");
+        userRegisterDto.setBirthDate(LocalDate.of(1996, 4, 10));
+        userRegisterDto.setPhoneNumber("+56912345678");
         userRegisterDto.setAdmin(false);
 
         User createdUser = userService.save(userRegisterDto);
 
         assertAll(
             () -> assertNotNull(createdUser),
-            () -> assertEquals("ricardo", createdUser.getUsername()),
+            () -> assertEquals("avatar1.jpg", createdUser.getAvatar()),
+            () -> assertEquals("Ricardo", createdUser.getFirstName()),
+            () -> assertEquals("Retamal", createdUser.getLastName()),
+            () -> assertEquals("ricardo10", createdUser.getUsername()),
             () -> assertEquals("ricardo@gmail.com", createdUser.getEmail()),
+            () -> assertEquals(LocalDate.of(1996, 4, 10), createdUser.getBirthDate()),
+            () -> assertEquals("+56912345678", createdUser.getPhoneNumber()),
             () -> assertFalse(createdUser.isAdmin()),
             () -> assertTrue(createdUser.isEnabled()),
             () -> assertEquals("ROLE_USER", createdUser.getRoles().getFirst().getName())
@@ -167,7 +214,15 @@ public class UserServiceTest {
         when(userRepository.save(any())).thenReturn(userUpdated);
 
         UserUpdateInfoDto userUpdateInfoDto = 
-            new UserUpdateInfoDto("ricardo2", "ricardo@correo.cl", false);
+            new UserUpdateInfoDto(
+                "avatar105.png",
+                "Ricardo",
+                "Guerrero", 
+                "ricardo2",
+                "ricardo@correo.cl", 
+                LocalDate.of(1996, 4, 10),
+                "+56935405236", false
+            );
 
         Optional<User> userUpdatedOptional = userService.update(userUpdateInfoDto, 1L);
 
@@ -263,7 +318,8 @@ public class UserServiceTest {
         Optional<User> userOptionalRequest = userService.blockUser(1L);
 
         assertTrue(userOptionalRequest.isPresent());
-        assertEquals("ricardo", userOptionalRequest.orElseThrow().getUsername());
+        assertEquals("ricardo10", userOptionalRequest.orElseThrow().getUsername());
+        assertEquals("Retamal", userOptionalRequest.orElseThrow().getLastName());
         assertFalse(userOptionalRequest.orElseThrow().isEnabled());
     }
 
@@ -278,7 +334,8 @@ public class UserServiceTest {
         Optional<User> userOptionalRequest = userService.unlockUser(1L);
 
         assertTrue(userOptionalRequest.isPresent());
-        assertEquals("ricardo", userOptionalRequest.orElseThrow().getUsername());
+        assertEquals("ricardo10", userOptionalRequest.orElseThrow().getUsername());
+        assertEquals("Retamal", userOptionalRequest.orElseThrow().getLastName());
         assertTrue(userOptionalRequest.orElseThrow().isEnabled());
     }
     

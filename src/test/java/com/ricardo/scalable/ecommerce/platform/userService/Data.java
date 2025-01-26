@@ -2,6 +2,7 @@ package com.ricardo.scalable.ecommerce.platform.userService;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -29,9 +30,14 @@ public class Data {
         roles.add(role);
 
         user1.setId(1L);
-        user1.setUsername("ricardo");
+        user1.setAvatar("avatar1.jpg");
+        user1.setFirstName("Ricardo");
+        user1.setLastName("Retamal");
+        user1.setUsername("ricardo10");
         user1.setEmail("ricardo@gmail.com");
         user1.setPassword("ricardo12345");
+        user1.setBirthDate(LocalDate.of(1996, 4, 10));
+        user1.setPhoneNumber("+56912345678");
         user1.setEnabled(true);
         user1.setAdmin(false);
         user1.setRoles(roles);
@@ -51,9 +57,14 @@ public class Data {
         roles.add(role);
 
         user.setId(1L);
-        user.setUsername("mateo");
+        user.setAvatar("avatar2.jpg");
+        user.setFirstName("Mateo");
+        user.setLastName("Retamal");
+        user.setUsername("mateo10");
         user.setEmail("mateo@gmail.com");
         user.setPassword("mateo12345");
+        user.setBirthDate(LocalDate.of(2024, 9, 1));
+        user.setPhoneNumber("+56987654321");
         user.setEnabled(true);
         user.setAdmin(false);
         user.setRoles(roles);

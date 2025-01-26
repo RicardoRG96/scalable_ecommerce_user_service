@@ -57,9 +57,14 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User save(UserRegisterDto user) {
         User userEntity = new User();
+        userEntity.setAvatar(user.getAvatar());
+        userEntity.setFirstName(user.getFirstName());
+        userEntity.setLastName(user.getLastName());
         userEntity.setUsername(user.getUsername());
         userEntity.setEmail(user.getEmail());
         userEntity.setPassword(passwordEncoder.encode(user.getPassword()));
+        userEntity.setBirthDate(user.getBirthDate());
+        userEntity.setPhoneNumber(user.getPhoneNumber());
 
         userEntity.setRoles(getRoles(user));
         userEntity.setEnabled(true);
@@ -72,8 +77,13 @@ public class UserServiceImpl implements UserService {
         Optional<User> userOptional = userRepository.findById(id);
 
         return userOptional.map(dbUser -> {
+            dbUser.setAvatar(userUpdated.getAvatar());
+            dbUser.setFirstName(userUpdated.getFirstName());
+            dbUser.setLastName(userUpdated.getLastName());
             dbUser.setEmail(userUpdated.getEmail());
             dbUser.setUsername(userUpdated.getUsername());
+            dbUser.setBirthDate(userUpdated.getBirthDate());
+            dbUser.setPhoneNumber(userUpdated.getPhoneNumber());
             if (userUpdated.isEnabled() == null) {
                 dbUser.setEnabled(true);
             } else {
