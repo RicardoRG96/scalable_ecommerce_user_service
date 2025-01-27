@@ -20,6 +20,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,9 +83,14 @@ public class UserControllerTest {
         roles.add(new Role(2L, "ROLE_USER"));
 
         user.setId(1L);
-        user.setUsername("alejandro");
+        user.setAvatar("avatar1.png");
+        user.setFirstName("alejandro");
+        user.setLastName("retamal");
+        user.setUsername("alejandro10");
         user.setEmail("alejandro@gmail.com");
         user.setPassword("alejandro12345");
+        user.setBirthDate(LocalDate.of(1996, 4, 10));
+        user.setPhoneNumber("+56952419637");
         user.setEnabled(true);
         user.setAdmin(false);
         user.setRoles(roles);
@@ -99,7 +105,7 @@ public class UserControllerTest {
         User user = createUser001();
 
         client.get()
-                .uri("/username/alejandro")
+                .uri("/username/alejandro10")
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
@@ -182,9 +188,14 @@ public class UserControllerTest {
         roles.add(new Role(2L, "ROLE_USER"));
 
         user.setId(2L);
-        user.setUsername("ester");
+        user.setAvatar("avatar2.png");
+        user.setFirstName("ester");
+        user.setLastName("guevara");
+        user.setUsername("ester17");
         user.setEmail("ester@gmail.com");
         user.setPassword("ester12345");
+        user.setBirthDate(LocalDate.of(1994, 1, 17));
+        user.setPhoneNumber("+56932189745");
         user.setEnabled(true);
         user.setAdmin(false);
         user.setRoles(roles);
@@ -197,9 +208,14 @@ public class UserControllerTest {
     @Order(5)
     void testRegister() {
         UserRegisterDto userRegisterRequest = new UserRegisterDto();
-        userRegisterRequest.setUsername("mateo");
+        userRegisterRequest.setAvatar("avatar4.png");
+        userRegisterRequest.setFirstName("mateo");
+        userRegisterRequest.setLastName("retamal");
+        userRegisterRequest.setUsername("mateo10");
         userRegisterRequest.setEmail("mateo@gmail.com");
         userRegisterRequest.setPassword("mateo12345");
+        userRegisterRequest.setBirthDate(LocalDate.of(2024, 9, 1));
+        userRegisterRequest.setPhoneNumber("+56912345678");
 
         client.post()
                 .uri("/register")
@@ -215,8 +231,12 @@ public class UserControllerTest {
                         assertAll(
                             () -> assertEquals(4L, json.path("id").asLong()),
                             () -> assertNotNull(json),
-                            () -> assertEquals("mateo", json.path("username").asText()),
+                            () -> assertEquals("avatar4.png", json.path("avatar").asText()),
+                            () -> assertEquals("mateo", json.path("firstName").asText()),
+                            () -> assertEquals("retamal", json.path("lastName").asText()),
+                            () -> assertEquals("mateo10", json.path("username").asText()),
                             () -> assertNotNull(json.path("password").asText()),
+                            () -> assertEquals("+56912345678", json.path("phoneNumber").asText()),
                             () -> assertTrue(json.path("enabled").asBoolean()),
                             () -> assertFalse(json.path("admin").asBoolean()),
                             () -> assertNotNull(json.path("roles"))
@@ -240,9 +260,14 @@ public class UserControllerTest {
     @Order(6)
     void testCreateUser() {
         UserRegisterDto userRegisterRequest = new UserRegisterDto();
-        userRegisterRequest.setUsername("pepa");
+        userRegisterRequest.setAvatar("avatar5.png");
+        userRegisterRequest.setFirstName("pepa");
+        userRegisterRequest.setLastName("pepona");
+        userRegisterRequest.setUsername("pepa25");
         userRegisterRequest.setEmail("pepa@gmail.com");
         userRegisterRequest.setPassword("pepa12345");
+        userRegisterRequest.setBirthDate(LocalDate.of(1990, 5, 10));
+        userRegisterRequest.setPhoneNumber("+56998765432");
 
         client.post()
                 .uri("/")
@@ -258,8 +283,12 @@ public class UserControllerTest {
                         assertAll(
                             () -> assertEquals(5L, json.path("id").asLong()),
                             () -> assertNotNull(json),
-                            () -> assertEquals("pepa", json.path("username").asText()),
+                            () -> assertEquals("avatar5.png", json.path("avatar").asText()),
+                            () -> assertEquals("pepa", json.path("firstName").asText()),
+                            () -> assertEquals("pepona", json.path("lastName").asText()),
+                            () -> assertEquals("pepa25", json.path("username").asText()),
                             () -> assertNotNull(json.path("password").asText()),
+                            () -> assertEquals("+56998765432", json.path("phoneNumber").asText()),
                             () -> assertTrue(json.path("enabled").asBoolean()),
                             () -> assertFalse(json.path("admin").asBoolean()),
                             () -> assertNotNull(json.path("roles"))
@@ -283,8 +312,13 @@ public class UserControllerTest {
     @Order(7)
     void testUpdateUser() {
         UserUpdateInfoDto userUpdateRequest = new UserUpdateInfoDto();
-        userUpdateRequest.setUsername("pepona");
+        userUpdateRequest.setAvatar("avatar6.png");
+        userUpdateRequest.setFirstName("pepa");
+        userUpdateRequest.setLastName("pepona");
+        userUpdateRequest.setUsername("pepona1500");
         userUpdateRequest.setEmail("pepona@gmail.com");
+        userUpdateRequest.setBirthDate(LocalDate.of(1990, 5, 10));
+        userUpdateRequest.setPhoneNumber("+56998768567");
         userUpdateRequest.setEnabled(false);
 
         client.put()
@@ -301,8 +335,12 @@ public class UserControllerTest {
                         assertAll(
                             () -> assertNotNull(json),
                             () -> assertEquals(5L, json.path("id").asLong()),
-                            () -> assertEquals("pepona", json.path("username").asText()),
+                            () -> assertEquals("avatar6.png", json.path("avatar").asText()),
+                            () -> assertEquals("pepa", json.path("firstName").asText()),
+                            () -> assertEquals("pepona", json.path("lastName").asText()),
+                            () -> assertEquals("pepona1500", json.path("username").asText()),
                             () -> assertNotNull(json.path("password").asText()),
+                            () -> assertEquals("+56998768567", json.path("phoneNumber").asText()),
                             () -> assertFalse(json.path("enabled").asBoolean()),
                             () -> assertFalse(json.path("admin").asBoolean()),
                             () -> assertNotNull(json.path("roles"))
@@ -413,7 +451,10 @@ public class UserControllerTest {
                         assertAll(
                             () -> assertNotNull(json),
                             () -> assertEquals(1L, json.path("id").asLong()),
-                            () -> assertEquals("alejandro", json.path("username").asText()),
+                            () -> assertEquals("avatar1.png", json.path("avatar").asText()),
+                            () -> assertEquals("alejandro", json.path("firstName").asText()),
+                            () -> assertEquals("retamal", json.path("lastName").asText()),
+                            () -> assertEquals("alejandro10", json.path("username").asText()),
                             () -> assertTrue(json.path("enabled").asBoolean()),
                             () -> assertTrue(json.path("admin").asBoolean()),
                             () -> assertNotNull(json.path("roles")),
@@ -456,7 +497,10 @@ public class UserControllerTest {
                         assertAll(
                             () -> assertNotNull(json),
                             () -> assertEquals(3L, json.path("id").asLong()),
-                            () -> assertEquals("pepe", json.path("username").asText()),
+                            () -> assertEquals("avatar3.png", json.path("avatar").asText()),
+                            () -> assertEquals("pepe", json.path("firstName").asText()),
+                            () -> assertEquals("pepon", json.path("lastName").asText()),
+                            () -> assertEquals("pepe58", json.path("username").asText()),
                             () -> assertFalse(json.path("enabled").asBoolean())
                         );
                     } catch (IOException ex) {
@@ -485,7 +529,10 @@ public class UserControllerTest {
                         assertAll(
                             () -> assertNotNull(json),
                             () -> assertEquals(3L, json.path("id").asLong()),
-                            () -> assertEquals("pepe", json.path("username").asText()),
+                            () -> assertEquals("avatar3.png", json.path("avatar").asText()),
+                            () -> assertEquals("pepe", json.path("firstName").asText()),
+                            () -> assertEquals("pepon", json.path("lastName").asText()),
+                            () -> assertEquals("pepe58", json.path("username").asText()),
                             () -> assertTrue(json.path("enabled").asBoolean())
                         );
                     } catch (IOException ex) {

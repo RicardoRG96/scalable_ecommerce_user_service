@@ -22,7 +22,6 @@ public class UserUpdateInfoDto {
     @Email
     private String email;
 
-    @NotBlank
     private LocalDate birthDate;
 
     @NotBlank

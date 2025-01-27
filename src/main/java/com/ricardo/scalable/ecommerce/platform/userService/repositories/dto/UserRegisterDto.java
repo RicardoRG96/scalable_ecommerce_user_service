@@ -28,7 +28,6 @@ public class UserRegisterDto {
     @Size(min = 6, max = 25)
     private String password;
 
-    @NotBlank
     private LocalDate birthDate;
 
     private String phoneNumber;

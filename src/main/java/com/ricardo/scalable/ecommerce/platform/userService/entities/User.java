@@ -40,7 +40,6 @@ public class User {
 
     private String password;
 
-    @NotBlank
     @Column(name = "birth_date")
     private LocalDate birthDate;
 
