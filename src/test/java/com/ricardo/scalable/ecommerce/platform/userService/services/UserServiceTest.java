@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.ricardo.scalable.ecommerce.platform.userService.Data;
+import static com.ricardo.scalable.ecommerce.platform.userService.services.testData.UserServiceTestData.*;
 import com.ricardo.scalable.ecommerce.platform.userService.entities.Role;
 import com.ricardo.scalable.ecommerce.platform.userService.entities.User;
 import com.ricardo.scalable.ecommerce.platform.userService.exceptions.PasswordDoNotMatchException;
@@ -44,100 +44,64 @@ public class UserServiceTest {
 
     @Test
     void testFindById() {
-        when(userRepository.findById(1L)).thenReturn(Data.createUser001());
-        when(userRepository.findById(2L)).thenReturn(Data.createUser002());
+        when(userRepository.findById(1L)).thenReturn(createUser001());
 
         Optional<User> user1 = userService.findById(1L);
-        Optional<User> user2 = userService.findById(2L);
 
         assertTrue(user1.isPresent());
-        assertTrue(user2.isPresent());
         assertEquals("ricardo10", user1.orElseThrow().getUsername());
-        assertEquals("mateo10", user2.orElseThrow().getUsername());
         assertEquals("Ricardo", user1.orElseThrow().getFirstName());
         assertEquals("avatar1.jpg", user1.orElseThrow().getAvatar());
-        assertEquals("avatar2.jpg", user2.orElseThrow().getAvatar());
-        assertEquals("Mateo", user2.orElseThrow().getFirstName());
         assertEquals("Retamal", user1.orElseThrow().getLastName());
-        assertEquals("Retamal", user2.orElseThrow().getLastName());
         assertEquals("+56912345678", user1.orElseThrow().getPhoneNumber());
-        assertEquals("+56987654321", user2.orElseThrow().getPhoneNumber());
         assertEquals("1996-04-10", user1.orElseThrow().getBirthDate().toString());
-        assertEquals("2024-09-01", user2.orElseThrow().getBirthDate().toString());
         assertEquals(1, user1.orElseThrow().getRoles().size());
-        assertEquals(1, user2.orElseThrow().getRoles().size());
         assertEquals("ROLE_USER", user1.orElseThrow().getRoles().getFirst().getName());
-        assertEquals("ROLE_USER", user2.orElseThrow().getRoles().getFirst().getName());
 
         verify(userRepository).findById(1L);
-        verify(userRepository).findById(2L);
     }
 
     @Test
     void testFindByUsername() {
-        when(userRepository.findByUsername("ricardo")).thenReturn(Data.createUser001());
-        when(userRepository.findByUsername("mateo")).thenReturn(Data.createUser002());
+        when(userRepository.findByUsername("mateo")).thenReturn(createUser002());
 
-        Optional<User> user1 = userService.findByUsername("ricardo");
-        Optional<User> user2 = userService.findByUsername("mateo");
+        Optional<User> user = userService.findByUsername("mateo");
 
-        assertTrue(user1.isPresent());
-        assertTrue(user2.isPresent());
-        assertEquals("ricardo10", user1.orElseThrow().getUsername());
-        assertEquals("mateo10", user2.orElseThrow().getUsername());
-        assertEquals("Ricardo", user1.orElseThrow().getFirstName());
-        assertEquals("avatar1.jpg", user1.orElseThrow().getAvatar());
-        assertEquals("avatar2.jpg", user2.orElseThrow().getAvatar());
-        assertEquals("Mateo", user2.orElseThrow().getFirstName());
-        assertEquals("Retamal", user1.orElseThrow().getLastName());
-        assertEquals("Retamal", user2.orElseThrow().getLastName());
-        assertEquals("+56912345678", user1.orElseThrow().getPhoneNumber());
-        assertEquals("+56987654321", user2.orElseThrow().getPhoneNumber());
-        assertEquals("1996-04-10", user1.orElseThrow().getBirthDate().toString());
-        assertEquals("2024-09-01", user2.orElseThrow().getBirthDate().toString());
-        assertEquals(1, user1.orElseThrow().getRoles().size());
-        assertEquals(1, user2.orElseThrow().getRoles().size());
-        assertEquals("ROLE_USER", user1.orElseThrow().getRoles().getFirst().getName());
-        assertEquals("ROLE_USER", user2.orElseThrow().getRoles().getFirst().getName());
+        assertTrue(user.isPresent());
+        assertEquals("mateo10", user.orElseThrow().getUsername());
+        assertEquals("avatar2.jpg", user.orElseThrow().getAvatar());
+        assertEquals("Mateo", user.orElseThrow().getFirstName());
+        assertEquals("Retamal", user.orElseThrow().getLastName());
+        assertEquals("+56987654321", user.orElseThrow().getPhoneNumber());
+        assertEquals("2024-09-01", user.orElseThrow().getBirthDate().toString());
+        assertEquals(1, user.orElseThrow().getRoles().size());
+        assertEquals("ROLE_USER", user.orElseThrow().getRoles().getFirst().getName());
 
-        verify(userRepository).findByUsername("ricardo");
         verify(userRepository).findByUsername("mateo");
     }
 
     @Test
     void testFindByEmail() {
-        when(userRepository.findByEmail("ricardo@gmail.com")).thenReturn(Data.createUser001());
-        when(userRepository.findByEmail("mateo@gmail.com")).thenReturn(Data.createUser002());
+        when(userRepository.findByEmail("ricardo@gmail.com")).thenReturn(createUser001());
 
-        Optional<User> user1 = userService.findByEmail("ricardo@gmail.com");
-        Optional<User> user2 = userService.findByEmail("mateo@gmail.com");
+        Optional<User> user = userService.findByEmail("ricardo@gmail.com");
 
-        assertTrue(user1.isPresent());
-        assertTrue(user2.isPresent());
-        assertEquals("ricardo10", user1.orElseThrow().getUsername());
-        assertEquals("mateo10", user2.orElseThrow().getUsername());
-        assertEquals("Ricardo", user1.orElseThrow().getFirstName());
-        assertEquals("avatar1.jpg", user1.orElseThrow().getAvatar());
-        assertEquals("avatar2.jpg", user2.orElseThrow().getAvatar());
-        assertEquals("Mateo", user2.orElseThrow().getFirstName());
-        assertEquals("Retamal", user1.orElseThrow().getLastName());
-        assertEquals("Retamal", user2.orElseThrow().getLastName());
-        assertEquals("+56912345678", user1.orElseThrow().getPhoneNumber());
-        assertEquals("+56987654321", user2.orElseThrow().getPhoneNumber());
-        assertEquals("1996-04-10", user1.orElseThrow().getBirthDate().toString());
-        assertEquals("2024-09-01", user2.orElseThrow().getBirthDate().toString());
-        assertEquals(1, user1.orElseThrow().getRoles().size());
-        assertEquals(1, user2.orElseThrow().getRoles().size());
-        assertEquals("ROLE_USER", user1.orElseThrow().getRoles().getFirst().getName());
-        assertEquals("ROLE_USER", user2.orElseThrow().getRoles().getFirst().getName());
+        assertTrue(user.isPresent());
+        assertEquals("ricardo10", user.orElseThrow().getUsername());
+        assertEquals("Ricardo", user.orElseThrow().getFirstName());
+        assertEquals("avatar1.jpg", user.orElseThrow().getAvatar());
+        assertEquals("Retamal", user.orElseThrow().getLastName());
+        assertEquals("+56912345678", user.orElseThrow().getPhoneNumber());
+        assertEquals("1996-04-10", user.orElseThrow().getBirthDate().toString());
+        assertEquals(1, user.orElseThrow().getRoles().size());
+        assertEquals("ROLE_USER", user.orElseThrow().getRoles().getFirst().getName());
 
         verify(userRepository).findByEmail("ricardo@gmail.com");
-        verify(userRepository).findByEmail("mateo@gmail.com");
     }
 
     @Test
     void testFindAll() {
-        when(userRepository.findAll()).thenReturn(Data.createListOfUsers());
+        when(userRepository.findAll()).thenReturn(createListOfUsers());
 
         List<User> users = (List<User>) userService.findAll();
 
@@ -169,32 +133,24 @@ public class UserServiceTest {
 
     @Test
     void testSave() {
+        UserRegisterDto userRegisterDto = createUserRegisterDto();
+        User userRegisterResponse = createUserRegisterResponse();
         Role role = new Role(1L, "ROLE_USER");
-        when(userRepository.save(any())).thenReturn(Data.createUser001().orElseThrow());
-        when(roleRepository.findByName("ROLE_USER")).thenReturn(Optional.of(role));
 
-        UserRegisterDto userRegisterDto = new UserRegisterDto();
-        userRegisterDto.setUsername("ricardo10");
-        userRegisterDto.setAvatar("avatar1.jpg");
-        userRegisterDto.setFirstName("Ricardo");
-        userRegisterDto.setLastName("Retamal");
-        userRegisterDto.setEmail("ricardo@gmail.com");
-        userRegisterDto.setPassword("ricardo12345");
-        userRegisterDto.setBirthDate(LocalDate.of(1996, 4, 10));
-        userRegisterDto.setPhoneNumber("+56912345678");
-        userRegisterDto.setAdmin(false);
+        when(userRepository.save(any())).thenReturn(userRegisterResponse);
+        when(roleRepository.findByName("ROLE_USER")).thenReturn(Optional.of(role));
 
         User createdUser = userService.save(userRegisterDto);
 
         assertAll(
             () -> assertNotNull(createdUser),
-            () -> assertEquals("avatar1.jpg", createdUser.getAvatar()),
-            () -> assertEquals("Ricardo", createdUser.getFirstName()),
-            () -> assertEquals("Retamal", createdUser.getLastName()),
-            () -> assertEquals("ricardo10", createdUser.getUsername()),
-            () -> assertEquals("ricardo@gmail.com", createdUser.getEmail()),
-            () -> assertEquals(LocalDate.of(1996, 4, 10), createdUser.getBirthDate()),
-            () -> assertEquals("+56912345678", createdUser.getPhoneNumber()),
+            () -> assertEquals("avatar3.jpg", createdUser.getAvatar()),
+            () -> assertEquals("Carla", createdUser.getFirstName()),
+            () -> assertEquals("Tur", createdUser.getLastName()),
+            () -> assertEquals("carla17", createdUser.getUsername()),
+            () -> assertEquals("carla@gmail.com", createdUser.getEmail()),
+            () -> assertEquals(LocalDate.of(1994, 1, 17), createdUser.getBirthDate()),
+            () -> assertEquals("+56998963254", createdUser.getPhoneNumber()),
             () -> assertFalse(createdUser.isAdmin()),
             () -> assertTrue(createdUser.isEnabled()),
             () -> assertEquals("ROLE_USER", createdUser.getRoles().getFirst().getName())
@@ -205,24 +161,12 @@ public class UserServiceTest {
 
     @Test
     void testUpdate() {
-        User userUpdated = Data.createUser001().orElseThrow();
-        userUpdated.setUsername("ricardo2");
-        userUpdated.setEmail("ricardo@correo.cl");
-        userUpdated.setEnabled(false);
+        User userUpdated = createUpdatedUser();
 
-        when(userRepository.findById(1L)).thenReturn(Data.createUser001());
+        when(userRepository.findById(1L)).thenReturn(createUser001());
         when(userRepository.save(any())).thenReturn(userUpdated);
 
-        UserUpdateInfoDto userUpdateInfoDto = 
-            new UserUpdateInfoDto(
-                "avatar105.png",
-                "Ricardo",
-                "Guerrero", 
-                "ricardo2",
-                "ricardo@correo.cl", 
-                LocalDate.of(1996, 4, 10),
-                "+56935405236", false
-            );
+        UserUpdateInfoDto userUpdateInfoDto = createUserUpdateInfoDto();
 
         Optional<User> userUpdatedOptional = userService.update(userUpdateInfoDto, 1L);
 
@@ -235,10 +179,10 @@ public class UserServiceTest {
 
     @Test
     void testUpdatePassword() throws PasswordDoNotMatchException {
-        User userUpdatedResponse = Data.createUser001().orElseThrow();
+        User userUpdatedResponse = createUser001().orElseThrow();
         userUpdatedResponse.setPassword(passwordEncoder.encode("ricardo123456"));
 
-        User user = Data.createUser001().orElseThrow();
+        User user = createUser001().orElseThrow();
         user.setPassword(passwordEncoder.encode("ricardo12345"));
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
@@ -256,10 +200,10 @@ public class UserServiceTest {
 
     @Test
     void testUpdatePasswordThrowsException() {
-        User userUpdatedResponse = Data.createUser001().orElseThrow();
+        User userUpdatedResponse = createUser001().orElseThrow();
         userUpdatedResponse.setPassword(passwordEncoder.encode("ricardo123456"));
 
-        User user = Data.createUser001().orElseThrow();
+        User user = createUser001().orElseThrow();
         user.setPassword(passwordEncoder.encode("ricardo12345"));
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
@@ -275,14 +219,14 @@ public class UserServiceTest {
 
     @Test
     void testAddUserRoles() {
-        User userUpdatedResponse = Data.createUser001().orElseThrow();
+        User userUpdatedResponse = createUser001().orElseThrow();
         Role addedRole1 = new Role(2L, "ROLE_ADMIN");
         Role addedRole2 = new Role(3L, "ROLE_SELLER");
 
         userUpdatedResponse.getRoles().add(addedRole1);
         userUpdatedResponse.getRoles().add(addedRole2);
 
-        when(userRepository.findById(1L)).thenReturn(Data.createUser001());
+        when(userRepository.findById(1L)).thenReturn(createUser001());
         when(userRepository.save(any())).thenReturn(userUpdatedResponse);
 
         User userUpdateRequest = new User();
@@ -309,10 +253,10 @@ public class UserServiceTest {
 
     @Test
     void testBlockUser() {
-        User mockBlockedUserResponse = Data.createUser001().orElseThrow();
+        User mockBlockedUserResponse = createUser001().orElseThrow();
         mockBlockedUserResponse.setEnabled(false);
 
-        when(userRepository.findById(1L)).thenReturn(Data.createUser001());
+        when(userRepository.findById(1L)).thenReturn(createUser001());
         when(userRepository.save(any())).thenReturn(mockBlockedUserResponse);
 
         Optional<User> userOptionalRequest = userService.blockUser(1L);
@@ -325,10 +269,10 @@ public class UserServiceTest {
 
     @Test
     void testUnlockUser() {
-        User mockUserResponse = Data.createUser001().orElseThrow();
+        User mockUserResponse = createUser001().orElseThrow();
         mockUserResponse.setEnabled(true);
 
-        when(userRepository.findById(1L)).thenReturn(Data.createUser001());
+        when(userRepository.findById(1L)).thenReturn(createUser001());
         when(userRepository.save(any())).thenReturn(mockUserResponse);
 
         Optional<User> userOptionalRequest = userService.unlockUser(1L);
