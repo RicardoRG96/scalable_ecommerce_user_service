@@ -18,10 +18,6 @@ import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.User
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.*;
 
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,6 +26,8 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+
+import static com.ricardo.scalable.ecommerce.platform.userService.services.testData.UserControllerTestData.*;
 
 import org.springframework.core.env.Environment;
 
@@ -67,7 +65,11 @@ public class UserControllerTest {
                 .jsonPath("$.enabled").isEqualTo(true)
                 .jsonPath("$.roles").isArray()
                 .jsonPath("$.roles[0].name").isEqualTo("ROLE_USER");
+    }
 
+    @Test
+    @Order(2)
+    void testGetByIdNotFound() {
         String notExistingUserId = "50";
 
         client.get()
@@ -76,31 +78,8 @@ public class UserControllerTest {
                 .expectStatus().isNotFound();
     }
 
-    private User createUser001() {
-        User user = new User();
-        List<Role> roles = new ArrayList<>();
-
-        roles.add(new Role(2L, "ROLE_USER"));
-
-        user.setId(1L);
-        user.setAvatar("avatar1.png");
-        user.setFirstName("alejandro");
-        user.setLastName("retamal");
-        user.setUsername("alejandro10");
-        user.setEmail("alejandro@gmail.com");
-        user.setPassword("alejandro12345");
-        user.setBirthDate(LocalDate.of(1996, 4, 10));
-        user.setPhoneNumber("+56952419637");
-        user.setEnabled(true);
-        user.setAdmin(false);
-        user.setRoles(roles);
-        user.setCreatedAt(Timestamp.from(Instant.now()));
-
-        return user;
-    }
-
     @Test
-    @Order(2)
+    @Order(3)
     void testGetByUsername() {
         User user = createUser001();
 
@@ -117,7 +96,11 @@ public class UserControllerTest {
                 .jsonPath("$.roles").isArray()
                 .jsonPath("$.roles").isNotEmpty()
                 .jsonPath("$.roles[0].name").isEqualTo("ROLE_USER");
+    }
 
+    @Test
+    @Order(4)
+    void testGetByUsernameNotFound() {
         String notExistingUsername = "example";
 
         client.get()
@@ -127,7 +110,7 @@ public class UserControllerTest {
     }
 
     @Test
-    @Order(3)
+    @Order(5)
     void testGetByEmail() {
         User user = createUser001();
 
@@ -145,7 +128,11 @@ public class UserControllerTest {
                 .jsonPath("$.roles").isNotEmpty()
                 .jsonPath("$.roles").isArray()
                 .jsonPath("$.roles[0].name").isEqualTo("ROLE_USER");
-        
+    }
+
+    @Test
+    @Order(6)
+    void testGetByEmailNotFound() {
         String notExistingEmail = "notExisting@example.com";
 
         client.get()
@@ -155,7 +142,7 @@ public class UserControllerTest {
     }
 
     @Test
-    @Order(4)
+    @Order(7)
     void testGetAllUsers() {
         User user1 = createUser001();
         User user2 = createUser002();
@@ -181,41 +168,10 @@ public class UserControllerTest {
                 .jsonPath("$[1].roles").isNotEmpty();
     }
 
-    private User createUser002() {
-        User user = new User();
-        List<Role> roles = new ArrayList<>();
-
-        roles.add(new Role(2L, "ROLE_USER"));
-
-        user.setId(2L);
-        user.setAvatar("avatar2.png");
-        user.setFirstName("ester");
-        user.setLastName("guevara");
-        user.setUsername("ester17");
-        user.setEmail("ester@gmail.com");
-        user.setPassword("ester12345");
-        user.setBirthDate(LocalDate.of(1994, 1, 17));
-        user.setPhoneNumber("+56932189745");
-        user.setEnabled(true);
-        user.setAdmin(false);
-        user.setRoles(roles);
-        user.setCreatedAt(Timestamp.from(Instant.now()));
-
-        return user;
-    }
-
     @Test
-    @Order(5)
+    @Order(8)
     void testRegister() {
-        UserRegisterDto userRegisterRequest = new UserRegisterDto();
-        userRegisterRequest.setAvatar("avatar4.png");
-        userRegisterRequest.setFirstName("mateo");
-        userRegisterRequest.setLastName("retamal");
-        userRegisterRequest.setUsername("mateo10");
-        userRegisterRequest.setEmail("mateo@gmail.com");
-        userRegisterRequest.setPassword("mateo12345");
-        userRegisterRequest.setBirthDate(LocalDate.of(2024, 9, 1));
-        userRegisterRequest.setPhoneNumber("+56912345678");
+        UserRegisterDto userRegisterRequest = createUserRegisterDto001();
 
         client.post()
                 .uri("/register")
@@ -245,7 +201,11 @@ public class UserControllerTest {
                         e.printStackTrace();
                     }
                 });
+    }
 
+    @Test
+    @Order(9)
+    void testRegisterBadRequest() {
         UserRegisterDto userRegisterBadRequest = new UserRegisterDto();
 
         client.post()
@@ -257,17 +217,9 @@ public class UserControllerTest {
     }
 
     @Test
-    @Order(6)
+    @Order(10)
     void testCreateUser() {
-        UserRegisterDto userRegisterRequest = new UserRegisterDto();
-        userRegisterRequest.setAvatar("avatar5.png");
-        userRegisterRequest.setFirstName("pepa");
-        userRegisterRequest.setLastName("pepona");
-        userRegisterRequest.setUsername("pepa25");
-        userRegisterRequest.setEmail("pepa@gmail.com");
-        userRegisterRequest.setPassword("pepa12345");
-        userRegisterRequest.setBirthDate(LocalDate.of(1990, 5, 10));
-        userRegisterRequest.setPhoneNumber("+56998765432");
+        UserRegisterDto userRegisterRequest = createUserRegisterDto002();
 
         client.post()
                 .uri("/")
@@ -297,7 +249,11 @@ public class UserControllerTest {
                         ex.printStackTrace();
                     }
                 });
+    }
 
+    @Test
+    @Order(11)
+    void testCreateUserBadRequest() {
         UserRegisterDto userRegisterBadRequest = new UserRegisterDto();
 
         client.post()
@@ -309,17 +265,9 @@ public class UserControllerTest {
     }
 
     @Test
-    @Order(7)
+    @Order(12)
     void testUpdateUser() {
-        UserUpdateInfoDto userUpdateRequest = new UserUpdateInfoDto();
-        userUpdateRequest.setAvatar("avatar6.png");
-        userUpdateRequest.setFirstName("pepa");
-        userUpdateRequest.setLastName("pepona");
-        userUpdateRequest.setUsername("pepona1500");
-        userUpdateRequest.setEmail("pepona@gmail.com");
-        userUpdateRequest.setBirthDate(LocalDate.of(1990, 5, 10));
-        userUpdateRequest.setPhoneNumber("+56998768567");
-        userUpdateRequest.setEnabled(false);
+        UserUpdateInfoDto userUpdateRequest = createUserUpdateInfoDto();
 
         client.put()
                 .uri("/5")
@@ -349,7 +297,11 @@ public class UserControllerTest {
                     ex.printStackTrace();
                    } 
                 });
+    }
 
+    @Test
+    @Order(13)
+    void testUpdateUserBadRequest() {
         UserUpdateInfoDto userUpdateInfoBadRequest = new UserUpdateInfoDto();
         userUpdateInfoBadRequest.setUsername("");
         userUpdateInfoBadRequest.setEmail("example.com");
@@ -361,7 +313,12 @@ public class UserControllerTest {
                 .bodyValue(userUpdateInfoBadRequest)
                 .exchange()
                 .expectStatus().isBadRequest();
+    }
 
+    @Test
+    @Order(14)
+    void testUpdateUserNotFound() {
+        UserUpdateInfoDto userUpdateRequest = createUserUpdateInfoDto();
         String notExistingUserId = "50";
 
         client.put()
@@ -373,7 +330,7 @@ public class UserControllerTest {
     }
 
     @Test
-    @Order(8)
+    @Order(15)
     void testChangePassword() {
         UserUpdatePasswordDto userUpdatePasswordRequest = new UserUpdatePasswordDto();
         userUpdatePasswordRequest.setOldPassword("pepa12345");
@@ -385,7 +342,11 @@ public class UserControllerTest {
                 .bodyValue(userUpdatePasswordRequest)
                 .exchange()
                 .expectStatus().isNoContent();
-
+    }
+    
+    @Test
+    @Order(16)
+    void testChangePasswordUnauthorized() {
         UserUpdatePasswordDto userUpdatePasswordUnauthorizedRequest = new UserUpdatePasswordDto();
         userUpdatePasswordUnauthorizedRequest.setOldPassword("pepa12345");
         userUpdatePasswordUnauthorizedRequest.setNewPassword("pepona12345");
@@ -396,7 +357,11 @@ public class UserControllerTest {
                 .bodyValue(userUpdatePasswordUnauthorizedRequest)
                 .exchange()
                 .expectStatus().isUnauthorized();
+    }
 
+    @Test
+    @Order(17)
+    void testChangePasswordBadRequest() {
         UserUpdatePasswordDto userUpdatePasswordBadRequest = new UserUpdatePasswordDto();
         userUpdatePasswordBadRequest.setOldPassword("");
         userUpdatePasswordBadRequest.setNewPassword("");
@@ -407,7 +372,14 @@ public class UserControllerTest {
                 .bodyValue(userUpdatePasswordBadRequest)
                 .exchange()
                 .expectStatus().isBadRequest();
+    }
 
+    @Test
+    @Order(18)
+    void testChangePasswordNotFound() {
+        UserUpdatePasswordDto userUpdatePasswordRequest = new UserUpdatePasswordDto();
+        userUpdatePasswordRequest.setOldPassword("pepa12345");
+        userUpdatePasswordRequest.setNewPassword("pepona12345");
         String notExistingUserId = "50";
 
         client.put()
@@ -416,7 +388,11 @@ public class UserControllerTest {
                 .bodyValue(userUpdatePasswordRequest)
                 .exchange()
                 .expectStatus().isNotFound();
+    }
 
+    @Test
+    @Order(19)
+    void testChangePasswordInternalServerError() {
         UserUpdatePasswordDto userUpdatePasswordWithNullValues = new UserUpdatePasswordDto();
 
         client.put()
@@ -426,9 +402,9 @@ public class UserControllerTest {
                 .exchange()
                 .expectStatus().is5xxServerError();
     }
-    
+
     @Test
-    @Order(9)
+    @Order(20)
     void testChangeUserRoles() {
         User user = new User();
         Role adminRole = new Role(1L, "ROLE_ADMIN");
@@ -464,7 +440,11 @@ public class UserControllerTest {
                         ex.printStackTrace();
                     }
                 });
+    }
 
+    @Test
+    @Order(21)
+    void testChangeUserRolesInternalServerError() {
         User userWithoutRoles = new User();
 
         client.put()
@@ -473,7 +453,18 @@ public class UserControllerTest {
                 .bodyValue(userWithoutRoles)
                 .exchange()
                 .expectStatus().is5xxServerError();
+    }
 
+    @Test
+    @Order(22)
+    void testChangeUserRolesNotFound() {
+        User user = new User();
+        Role adminRole = new Role(1L, "ROLE_ADMIN");
+        Role sellerRole = new Role(3L, "ROLE_SELLER");
+        List<Role> roles = List.of(adminRole, sellerRole);
+
+        user.setRoles(roles);
+        
         client.put()
                 .uri("/roles/50")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -483,7 +474,7 @@ public class UserControllerTest {
     }
 
     @Test
-    @Order(10)
+    @Order(23)
     void testBlockUser() {
         client.put()
                 .uri("/block/3")
@@ -507,7 +498,11 @@ public class UserControllerTest {
                         ex.printStackTrace();
                     }
                 });
+    }
 
+    @Test
+    @Order(24)
+    void testBlockUserNotFound() {
         client.put()
                 .uri("/block/50")
                 .exchange()
@@ -515,7 +510,7 @@ public class UserControllerTest {
     }
 
     @Test
-    @Order(11)
+    @Order(25)
     void testUnlockUser() {
         client.put()
                 .uri("/unlock/3")
@@ -539,7 +534,11 @@ public class UserControllerTest {
                         ex.printStackTrace();
                     }
                 });
+    }
 
+    @Test
+    @Order(26)
+    void testUnlockUserNotFound() {
         client.put()
                 .uri("/unlock/50")
                 .exchange()
@@ -547,7 +546,7 @@ public class UserControllerTest {
     }
 
     @Test
-    @Order(12)
+    @Order(27)
     void testDelete() {
         client.delete()
                 .uri("/5")
@@ -570,7 +569,11 @@ public class UserControllerTest {
                         ex.printStackTrace();
                     }
                 });
+    }
 
+    @Test
+    @Order(28)
+    void testGetDeletedUser() {
         client.get()
                 .uri("/5")
                 .exchange()
