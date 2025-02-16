@@ -56,7 +56,7 @@ public class AddressController {
     public ResponseEntity<List<Address>> getAddressByUserIdAndTitle(@PathVariable Long userId, @PathVariable String title) {
         Optional<List<Address>> address = addressService.findByUserIdAndTitle(userId, title);
         boolean isPresent = address.isPresent();
-        boolean isEmpty = address.isEmpty();
+        boolean isEmpty = address.orElseThrow().isEmpty();
 
         if (isPresent && !isEmpty) {
             return ResponseEntity.ok(address.orElseThrow());
@@ -68,7 +68,7 @@ public class AddressController {
     public ResponseEntity<List<Address>> getAddressByUserIdAndAddressLine1(@PathVariable Long userId, @PathVariable String addressLine1) {
         Optional<List<Address>> address = addressService.findByUserIdAndAddressLine1(userId, addressLine1);
         boolean isPresent = address.isPresent();
-        boolean isEmpty = address.isEmpty();
+        boolean isEmpty = address.orElseThrow().isEmpty();
 
         if (isPresent && !isEmpty) {
             return ResponseEntity.ok(address.orElseThrow());
@@ -80,7 +80,7 @@ public class AddressController {
     public ResponseEntity<List<Address>> getAddressByUserIdAndCountry(@PathVariable Long userId, @PathVariable String country) {
         Optional<List<Address>> address = addressService.findByUserIdAndCountry(userId, country);
         boolean isPresent = address.isPresent();
-        boolean isEmpty = address.isEmpty();
+        boolean isEmpty = address.orElseThrow().isEmpty();
 
         if (isPresent && !isEmpty) {
             return ResponseEntity.ok(address.orElseThrow());
@@ -92,7 +92,7 @@ public class AddressController {
     public ResponseEntity<List<Address>> getAddressByUserIdAndCity(@PathVariable Long userId, @PathVariable String city) {
         Optional<List<Address>> address = addressService.findByUserIdAndCity(userId, city);
         boolean isPresent = address.isPresent();
-        boolean isEmpty = address.isEmpty();
+        boolean isEmpty = address.orElseThrow().isEmpty();
 
         if (isPresent && !isEmpty) {
             return ResponseEntity.ok(address.orElseThrow());
@@ -104,7 +104,7 @@ public class AddressController {
     public ResponseEntity<List<Address>> getAddressByUserIdAndCommune(@PathVariable Long userId, @PathVariable String commune) {
         Optional<List<Address>> address = addressService.findByUserIdAndCommune(userId, commune);
         boolean isPresent = address.isPresent();
-        boolean isEmpty = address.isEmpty();
+        boolean isEmpty = address.orElseThrow().isEmpty();
 
         if (isPresent && !isEmpty) {
             return ResponseEntity.ok(address.orElseThrow());
@@ -116,7 +116,7 @@ public class AddressController {
     public ResponseEntity<List<Address>> getAddressByUserIdAndPostalCode(@PathVariable Long userId, @PathVariable String postalCode) {
         Optional<List<Address>> address = addressService.findByUserIdAndPostalCode(userId, postalCode);
         boolean isPresent = address.isPresent();
-        boolean isEmpty = address.isEmpty();
+        boolean isEmpty = address.orElseThrow().isEmpty();
 
         if (isPresent && !isEmpty) {
             return ResponseEntity.ok(address.orElseThrow());
@@ -128,7 +128,7 @@ public class AddressController {
     public ResponseEntity<List<Address>> getAddressByUserIdAndLandmark(@PathVariable Long userId, @PathVariable String landmark) {
         Optional<List<Address>> address = addressService.findByUserIdAndLandmark(userId, landmark);
         boolean isPresent = address.isPresent();
-        boolean isEmpty = address.isEmpty();
+        boolean isEmpty = address.orElseThrow().isEmpty();
 
         if (isPresent && !isEmpty) {
             return ResponseEntity.ok(address.orElseThrow());
