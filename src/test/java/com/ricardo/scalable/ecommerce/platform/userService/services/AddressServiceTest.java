@@ -103,4 +103,26 @@ public class AddressServiceTest {
         );
     }
 
+    @Test
+    void testFindByUserIdAndCountry() {
+    Optional<List<Address>> addressesResult = createListOfAddressWithUserId1AndCountry();
+
+        when(addressRepository.findByUserIdAndCountry(1L, "Chile")).thenReturn(addressesResult);
+        
+        Optional<List<Address>> addresses = addressService.findByUserIdAndCountry(1L, "Chile");
+
+        assertAll(
+            () -> assertTrue(addresses.isPresent()),
+            () -> assertEquals(2, addresses.orElseThrow().size()),
+            () -> assertEquals("Casa en Viña del Mar", addresses.orElseThrow().get(0).getTitle()),
+            () -> assertEquals("Casa en Valparaíso", addresses.orElseThrow().get(1).getTitle()),
+            () -> assertEquals(1L, addresses.orElseThrow().get(0).getUser().getId()),
+            () -> assertEquals(1L, addresses.orElseThrow().get(1).getUser().getId()),
+            () -> assertEquals("Chile", addresses.orElseThrow().get(0).getCountry()),
+            () -> assertEquals("Chile", addresses.orElseThrow().get(1).getCountry()),
+            () -> assertEquals("Avenida San Martín 456", addresses.orElseThrow().get(0).getAddressLine1()),
+            () -> assertEquals("Subida Ecuador 101", addresses.orElseThrow().get(1).getAddressLine1())
+        );
+    }
+
 }
