@@ -18,6 +18,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ricardo.scalable.ecommerce.platform.userService.entities.Address;
 import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.AddressCreationDto;
 
 @ActiveProfiles("test")
@@ -458,6 +459,108 @@ public class AddressControllerTest {
                 .uri("/addresses")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(requestBody)
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
+    @Order(23)
+    void testUpdateAddress() {
+        Address requestBody = createAddress();
+        requestBody.setTitle("Casa Viña");
+        requestBody.setLandmark("Cerca de la playa");
+
+        client.put()
+                .uri("/addresses/7")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBody)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                                () -> assertNotNull(json),
+                                () -> assertEquals(7L, json.path("id").asLong()),
+                                () -> assertEquals(1L, json.path("user").path("id").asLong()),
+                                () -> assertEquals("Casa Viña", json.path("title").asText()),
+                                () -> assertEquals("Avenida San Martín 456", json.path("addressLine1").asText()),
+                                () -> assertEquals("Departamento 3C", json.path("addressLine2").asText()),
+                                () -> assertEquals("Chile", json.path("country").asText()),
+                                () -> assertEquals("Viña del Mar", json.path("city").asText()),
+                                () -> assertEquals("Viña del Mar", json.path("commune").asText()),
+                                () -> assertEquals("2520000", json.path("postalCode").asText()),
+                                () -> assertEquals("Cerca de la playa", json.path("landmark").asText())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(24)
+    void testUpdateAddressNotFound() {
+        Address requestBody = createAddress();
+        requestBody.setTitle("Casa Viña");
+        requestBody.setLandmark("Cerca de la playa");
+
+        client.put()
+                .uri("/addresses/100")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBody)
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
+    @Order(25)
+    void testUpdateAddressBadRequest() {
+        Address requestBody = new Address();
+
+        client.put()
+                .uri("/addresses/7")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBody)
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    @Test
+    @Order(26)
+    void testDeleteAddress() {
+        client.delete()
+                .uri("/addresses/7")
+                .exchange()
+                .expectStatus().isNoContent();
+
+        client.get()
+                .uri("/addresses")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                                () -> assertNotNull(json),
+                                () -> assertTrue(json.isArray()),
+                                () -> assertEquals(6, json.size())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(27)
+    void testGetDeletedAddress() {
+        client.get()
+                .uri("/addresses/7")
                 .exchange()
                 .expectStatus().isNotFound();
     }
