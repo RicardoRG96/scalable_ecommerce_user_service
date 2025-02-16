@@ -143,4 +143,58 @@ public class AddressServiceTest {
         );
     }
 
+    @Test
+    void testFindByUserIdAndCommune() {
+        Optional<List<Address>> addressesResult = Optional.of(List.of(createAddress001().orElseThrow()));
+
+        when(addressRepository.findByUserIdAndCommune(1L, "Viña del Mar")).thenReturn(addressesResult);
+        
+        Optional<List<Address>> addresses = addressService.findByUserIdAndCommune(1L, "Viña del Mar");
+
+        assertAll(
+            () -> assertTrue(addresses.isPresent()),
+            () -> assertEquals(1, addresses.orElseThrow().size()),
+            () -> assertEquals("Casa en Viña del Mar", addresses.orElseThrow().get(0).getTitle()),
+            () -> assertEquals(1L, addresses.orElseThrow().get(0).getUser().getId()),
+            () -> assertEquals("Viña del Mar", addresses.orElseThrow().get(0).getCommune()),
+            () -> assertEquals("Avenida San Martín 456", addresses.orElseThrow().get(0).getAddressLine1())
+        );
+    }
+
+    @Test
+    void testFindByUserIdAndPostalCode() {
+        Optional<List<Address>> addressesResult = Optional.of(List.of(createAddress001().orElseThrow()));
+
+        when(addressRepository.findByUserIdAndPostalCode(1L, "2520000")).thenReturn(addressesResult);
+        
+        Optional<List<Address>> addresses = addressService.findByUserIdAndPostalCode(1L, "2520000");
+
+        assertAll(
+            () -> assertTrue(addresses.isPresent()),
+            () -> assertEquals(1, addresses.orElseThrow().size()),
+            () -> assertEquals("Casa en Viña del Mar", addresses.orElseThrow().get(0).getTitle()),
+            () -> assertEquals(1L, addresses.orElseThrow().get(0).getUser().getId()),
+            () -> assertEquals("2520000", addresses.orElseThrow().get(0).getPostalCode()),
+            () -> assertEquals("Avenida San Martín 456", addresses.orElseThrow().get(0).getAddressLine1())
+        );
+    }
+
+    @Test
+    void testFindByUserIdAndLandmark() {
+        Optional<List<Address>> addressesResult = Optional.of(List.of(createAddress001().orElseThrow()));
+
+        when(addressRepository.findByUserIdAndLandmark(1L, "Cerca del Reloj de Flores")).thenReturn(addressesResult);
+        
+        Optional<List<Address>> addresses = addressService.findByUserIdAndLandmark(1L, "Cerca del Reloj de Flores");
+
+        assertAll(
+            () -> assertTrue(addresses.isPresent()),
+            () -> assertEquals(1, addresses.orElseThrow().size()),
+            () -> assertEquals("Casa en Viña del Mar", addresses.orElseThrow().get(0).getTitle()),
+            () -> assertEquals(1L, addresses.orElseThrow().get(0).getUser().getId()),
+            () -> assertEquals("Cerca del Reloj de Flores", addresses.orElseThrow().get(0).getLandmark()),
+            () -> assertEquals("Avenida San Martín 456", addresses.orElseThrow().get(0).getAddressLine1())
+        );
+    }
+
 }
