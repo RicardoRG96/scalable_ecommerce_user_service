@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,7 +30,7 @@ public class AddressController {
     private AddressService addressService;
 
     @GetMapping("/addresses/{id}")
-    public ResponseEntity<Address> getAddressById(Long id) {
+    public ResponseEntity<Address> getAddressById(@PathVariable Long id) {
         Optional<Address> address = addressService.findById(id);
         boolean isPresent = address.isPresent();
 
@@ -40,7 +41,7 @@ public class AddressController {
     }
 
     @GetMapping("/addresses/user/{userId}")
-    public ResponseEntity<List<Address>> getAddressByUserId(Long userId) {
+    public ResponseEntity<List<Address>> getAddressByUserId(@PathVariable Long userId) {
         Optional<List<Address>> address = addressService.findByUserId(userId);
         boolean isPresent = address.isPresent();
         boolean isEmpty = address.isEmpty();
@@ -52,7 +53,7 @@ public class AddressController {
     }
 
     @GetMapping("/addresses/user/{userId}/title/{title}")
-    public ResponseEntity<List<Address>> getAddressByUserIdAndTitle(Long userId, String title) {
+    public ResponseEntity<List<Address>> getAddressByUserIdAndTitle(@PathVariable Long userId, @PathVariable String title) {
         Optional<List<Address>> address = addressService.findByUserIdAndTitle(userId, title);
         boolean isPresent = address.isPresent();
         boolean isEmpty = address.isEmpty();
@@ -64,7 +65,7 @@ public class AddressController {
     }
 
     @GetMapping("/addresses/user/{userId}/addressLine1/{addressLine1}")
-    public ResponseEntity<List<Address>> getAddressByUserIdAndAddressLine1(Long userId, String addressLine1) {
+    public ResponseEntity<List<Address>> getAddressByUserIdAndAddressLine1(@PathVariable Long userId, @PathVariable String addressLine1) {
         Optional<List<Address>> address = addressService.findByUserIdAndAddressLine1(userId, addressLine1);
         boolean isPresent = address.isPresent();
         boolean isEmpty = address.isEmpty();
@@ -76,7 +77,7 @@ public class AddressController {
     }
 
     @GetMapping("/addresses/user/{userId}/country/{country}")
-    public ResponseEntity<List<Address>> getAddressByUserIdAndCountry(Long userId, String country) {
+    public ResponseEntity<List<Address>> getAddressByUserIdAndCountry(@PathVariable Long userId, @PathVariable String country) {
         Optional<List<Address>> address = addressService.findByUserIdAndCountry(userId, country);
         boolean isPresent = address.isPresent();
         boolean isEmpty = address.isEmpty();
@@ -88,7 +89,7 @@ public class AddressController {
     }
 
     @GetMapping("/addresses/user/{userId}/city/{city}")
-    public ResponseEntity<List<Address>> getAddressByUserIdAndCity(Long userId, String city) {
+    public ResponseEntity<List<Address>> getAddressByUserIdAndCity(@PathVariable Long userId, @PathVariable String city) {
         Optional<List<Address>> address = addressService.findByUserIdAndCity(userId, city);
         boolean isPresent = address.isPresent();
         boolean isEmpty = address.isEmpty();
@@ -100,7 +101,7 @@ public class AddressController {
     }
 
     @GetMapping("/addresses/user/{userId}/commune/{commune}")
-    public ResponseEntity<List<Address>> getAddressByUserIdAndCommune(Long userId, String commune) {
+    public ResponseEntity<List<Address>> getAddressByUserIdAndCommune(@PathVariable Long userId, @PathVariable String commune) {
         Optional<List<Address>> address = addressService.findByUserIdAndCommune(userId, commune);
         boolean isPresent = address.isPresent();
         boolean isEmpty = address.isEmpty();
@@ -112,7 +113,7 @@ public class AddressController {
     }
 
     @GetMapping("/addresses/user/{userId}/postalCode/{postalCode}")
-    public ResponseEntity<List<Address>> getAddressByUserIdAndPostalCode(Long userId, String postalCode) {
+    public ResponseEntity<List<Address>> getAddressByUserIdAndPostalCode(@PathVariable Long userId, @PathVariable String postalCode) {
         Optional<List<Address>> address = addressService.findByUserIdAndPostalCode(userId, postalCode);
         boolean isPresent = address.isPresent();
         boolean isEmpty = address.isEmpty();
@@ -124,7 +125,7 @@ public class AddressController {
     }
 
     @GetMapping("/addresses/user/{userId}/landmark/{landmark}")
-    public ResponseEntity<List<Address>> getAddressByUserIdAndLandmark(Long userId, String landmark) {
+    public ResponseEntity<List<Address>> getAddressByUserIdAndLandmark(@PathVariable Long userId, @PathVariable String landmark) {
         Optional<List<Address>> address = addressService.findByUserIdAndLandmark(userId, landmark);
         boolean isPresent = address.isPresent();
         boolean isEmpty = address.isEmpty();
@@ -170,7 +171,7 @@ public class AddressController {
     @PutMapping("/addresses/{id}")
     public ResponseEntity<?> updateAddress(
         @Valid @RequestBody Address address,
-        Long id,
+        @PathVariable Long id,
         BindingResult result
     ) {
         if (result.hasErrors()) {
@@ -186,7 +187,7 @@ public class AddressController {
     }
 
     @DeleteMapping("/addresses/{id}")
-    public ResponseEntity<?> deleteAddress(Long id) {
+    public ResponseEntity<?> deleteAddress(@PathVariable Long id) {
         Optional<Address> addressOptional = addressService.findById(id);
 
         if (addressOptional.isPresent()) {

@@ -13,3 +13,21 @@ INSERT INTO users_roles (user_id, role_id) VALUES
     (1, 2),
     (2, 2),
     (3, 2);
+
+INSERT INTO addresses (user_id, title, address_line_1, address_line_2, country, city, commune, postal_code, landmark) 
+    VALUES (1, 'Casa en Antofagasta', 'Avenida Argentina 123', 'Departamento 5A', 'Chile', 'Antofagasta', 'Antofagasta', '1240000', 'Cerca del Mall Plaza Antofagasta');
+
+INSERT INTO addresses (user_id, title, address_line_1, address_line_2, country, city, commune, postal_code, landmark) 
+    VALUES (1, 'Oficina en Rancagua', 'Calle Estado 456', 'Piso 3', 'Chile', 'Rancagua', 'Rancagua', '2820000', 'Frente a la Plaza de Los Héroes');
+
+INSERT INTO addresses (user_id, title, address_line_1, address_line_2, country, city, commune, postal_code, landmark) 
+    VALUES (2, 'Departamento en Puerto Montt', 'Avenida Diego Portales 789', 'Departamento 10B', 'Chile', 'Puerto Montt', 'Puerto Montt', '5480000', 'Cerca del Costanera Center');
+
+INSERT INTO addresses (user_id, title, address_line_1, address_line_2, country, city, commune, postal_code, landmark) 
+    VALUES (2, 'Casa en Iquique', 'Calle Thompson 1011', '', 'Chile', 'Iquique', 'Iquique', '1100000', 'Frente a la playa Cavancha');
+
+INSERT INTO addresses (user_id, title, address_line_1, address_line_2, country, city, commune, postal_code, landmark) 
+    VALUES (3, 'Casa en Chillán', 'Avenida O’Higgins 1213', '', 'Chile', 'Chillán', 'Chillán', '3780000', 'Cerca de la Plaza de Armas');
+
+INSERT INTO addresses (user_id, title, address_line_1, address_line_2, country, city, commune, postal_code, landmark) 
+    VALUES (3, 'Casa en Punta Arenas', 'Calle Magallanes 1415', '', 'Chile', 'Punta Arenas', 'Punta Arenas', '6200000', 'Frente al Estrecho de Magallanes');

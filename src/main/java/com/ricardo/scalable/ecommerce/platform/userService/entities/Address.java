@@ -30,8 +30,10 @@ public class Address {
     private String title;
 
     @NotBlank
+    @Column(name = "address_line_1")
     private String addressLine1;
 
+    @Column(name = "address_line_2")
     private String addressLine2;
 
     @NotBlank
@@ -44,6 +46,7 @@ public class Address {
     private String commune;
 
     @NotBlank
+    @Column(name = "postal_code")
     private String postalCode;
 
     private String landmark;
