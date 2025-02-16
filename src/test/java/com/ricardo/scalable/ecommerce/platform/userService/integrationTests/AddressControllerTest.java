@@ -227,6 +227,179 @@ public class AddressControllerTest {
     }
 
     @Test
+    @Order(11)
+    void testGetAddressByUserIdAndCity() {
+        client.get()
+                .uri("/addresses/user/3/city/Punta Arenas")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                                () -> assertNotNull(json),
+                                () -> assertTrue(json.isArray()),
+                                () -> assertEquals(1, json.size()),
+                                () -> assertEquals(6L, json.get(0).path("id").asLong()),
+                                () -> assertEquals(3L, json.get(0).path("user").path("id").asLong()),
+                                () -> assertEquals("Casa en Punta Arenas", json.get(0).path("title").asText()),
+                                () -> assertEquals("Calle Magallanes 1415", json.get(0).path("addressLine1").asText())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(12)
+    void testGetAddressByUserIdAndCityNotFound() {
+        client.get()
+                .uri("/addresses/user/3/city/Barcelona")
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
+    @Order(13)
+    void testGetAddressByUserIdAndCommune() {
+        client.get()
+                .uri("/addresses/user/1/commune/Antofagasta")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                                () -> assertNotNull(json),
+                                () -> assertTrue(json.isArray()),
+                                () -> assertEquals(1, json.size()),
+                                () -> assertEquals(1L, json.get(0).path("id").asLong()),
+                                () -> assertEquals(1L, json.get(0).path("user").path("id").asLong()),
+                                () -> assertEquals("Casa en Antofagasta", json.get(0).path("title").asText()),
+                                () -> assertEquals("Avenida Argentina 123", json.get(0).path("addressLine1").asText())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(14)
+    void testGetAddressByUserIdAndCommuneNotFound() {
+        client.get()
+                .uri("/addresses/user/1/commune/Providencia")
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
+    @Order(15)
+    void testGetAddressByUserIdAndPostalCode() {
+        client.get()
+                .uri("/addresses/user/2/postalCode/1100000")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                                () -> assertNotNull(json),
+                                () -> assertTrue(json.isArray()),
+                                () -> assertEquals(1, json.size()),
+                                () -> assertEquals(4L, json.get(0).path("id").asLong()),
+                                () -> assertEquals(2L, json.get(0).path("user").path("id").asLong()),
+                                () -> assertEquals("Casa en Iquique", json.get(0).path("title").asText()),
+                                () -> assertEquals("Calle Thompson 1011", json.get(0).path("addressLine1").asText())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(16)
+    void testGetAddressByUserIdAndPostalCodeNotFound() {
+        client.get()
+                .uri("/addresses/user/2/postalCode/9999999")
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
+    @Order(17)
+    void testGetAddressByUserIdAndLandmark() {
+        client.get()
+                .uri("/addresses/user/3/landmark/Cerca de la Plaza de Armas")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                                () -> assertNotNull(json),
+                                () -> assertTrue(json.isArray()),
+                                () -> assertEquals(1, json.size()),
+                                () -> assertEquals(5L, json.get(0).path("id").asLong()),
+                                () -> assertEquals(3L, json.get(0).path("user").path("id").asLong()),
+                                () -> assertEquals("Casa en Chillán", json.get(0).path("title").asText()),
+                                () -> assertEquals("Avenida O’Higgins 1213", json.get(0).path("addressLine1").asText())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(18)
+    void testGetAddressByUserIdAndLandmarkNotFound() {
+        client.get()
+                .uri("/addresses/user/3/landmark/Cerca del Cerro San Cristóbal")
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
+    @Order(19)
+    void testGetAllAddresses() {
+        client.get()
+                .uri("/addresses")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                                () -> assertNotNull(json),
+                                () -> assertTrue(json.isArray()),
+                                () -> assertEquals(6, json.size()),
+                                () -> assertEquals(1L, json.get(0).path("id").asLong()),
+                                () -> assertEquals(2L, json.get(1).path("id").asLong()),
+                                () -> assertEquals(3L, json.get(2).path("id").asLong()),
+                                () -> assertEquals(4L, json.get(3).path("id").asLong()),
+                                () -> assertEquals(5L, json.get(4).path("id").asLong()),
+                                () -> assertEquals(6L, json.get(5).path("id").asLong())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
     void testProfile() {
         String[] activeProfiles = env.getActiveProfiles();
         assertArrayEquals(new String[] { "test" }, activeProfiles);
