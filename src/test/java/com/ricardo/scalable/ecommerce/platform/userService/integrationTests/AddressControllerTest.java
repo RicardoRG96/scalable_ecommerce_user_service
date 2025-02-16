@@ -77,6 +77,44 @@ public class AddressControllerTest {
     }
 
     @Test
+    @Order(3)
+    void testGetAddressByUserId() {
+        client.get()
+                .uri("/addresses/user/1")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                                () -> assertNotNull(json),
+                                () -> assertTrue(json.isArray()),
+                                () -> assertEquals(2, json.size()),
+                                () -> assertEquals(1L, json.get(0).path("id").asLong()),
+                                () -> assertEquals(1L, json.get(1).path("user").path("id").asLong()),
+                                () -> assertEquals("Casa en Antofagasta", json.get(0).path("title").asText()),
+                                () -> assertEquals("Avenida Argentina 123", json.get(0).path("addressLine1").asText()),
+                                () -> assertEquals("Oficina en Rancagua", json.get(1).path("title").asText()),
+                                () -> assertEquals("Calle Estado 456", json.get(1).path("addressLine1").asText())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(4)
+    void testGetAddressByUserIdNotFound() {
+        client.get()
+                .uri("/addresses/user/100")
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
     void testProfile() {
         String[] activeProfiles = env.getActiveProfiles();
         assertArrayEquals(new String[] { "test" }, activeProfiles);

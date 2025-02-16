@@ -44,7 +44,7 @@ public class AddressController {
     public ResponseEntity<List<Address>> getAddressByUserId(@PathVariable Long userId) {
         Optional<List<Address>> address = addressService.findByUserId(userId);
         boolean isPresent = address.isPresent();
-        boolean isEmpty = address.isEmpty();
+        boolean isEmpty = address.orElseThrow().isEmpty();
 
         if (isPresent && !isEmpty) {
             return ResponseEntity.ok(address.orElseThrow());
