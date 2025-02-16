@@ -125,4 +125,22 @@ public class AddressServiceTest {
         );
     }
 
+    @Test
+    void testFindByUserIdAndCity() {
+        Optional<List<Address>> addressesResult = Optional.of(List.of(createAddress001().orElseThrow()));
+
+        when(addressRepository.findByUserIdAndCity(1L, "Viña del Mar")).thenReturn(addressesResult);
+        
+        Optional<List<Address>> addresses = addressService.findByUserIdAndCity(1L, "Viña del Mar");
+
+        assertAll(
+            () -> assertTrue(addresses.isPresent()),
+            () -> assertEquals(1, addresses.orElseThrow().size()),
+            () -> assertEquals("Casa en Viña del Mar", addresses.orElseThrow().get(0).getTitle()),
+            () -> assertEquals(1L, addresses.orElseThrow().get(0).getUser().getId()),
+            () -> assertEquals("Viña del Mar", addresses.orElseThrow().get(0).getCity()),
+            () -> assertEquals("Avenida San Martín 456", addresses.orElseThrow().get(0).getAddressLine1())
+        );
+    }
+
 }
