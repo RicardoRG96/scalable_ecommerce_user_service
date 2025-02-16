@@ -58,7 +58,7 @@ public class UserServiceTestData {
 
         roles.add(role);
 
-        user.setId(1L);
+        user.setId(2L);
         user.setAvatar("avatar2.jpg");
         user.setFirstName("Mateo");
         user.setLastName("Retamal");
@@ -104,7 +104,7 @@ public class UserServiceTestData {
 
         roles.add(role);
 
-        user.setId(1L);
+        user.setId(3L);
         user.setAvatar("avatar3.jpg");
         user.setFirstName("Carla");
         user.setLastName("Tur");

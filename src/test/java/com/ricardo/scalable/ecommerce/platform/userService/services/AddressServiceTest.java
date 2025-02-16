@@ -86,4 +86,21 @@ public class AddressServiceTest {
         );
     }
 
+    @Test
+    void testFindByUserIdAndAddressLine1() {
+        Optional<List<Address>> addressesResult = Optional.of(List.of(createAddress002().orElseThrow()));
+
+        when(addressRepository.findByUserIdAndAddressLine1(2L, "Calle Barros Arana 789")).thenReturn(addressesResult);
+        
+        Optional<List<Address>> addresses = addressService.findByUserIdAndAddressLine1(2L, "Calle Barros Arana 789");
+
+        assertAll(
+            () -> assertTrue(addresses.isPresent()),
+            () -> assertEquals(1, addresses.orElseThrow().size()),
+            () -> assertEquals("Oficina en Concepción", addresses.orElseThrow().get(0).getTitle()),
+            () -> assertEquals(2L, addresses.orElseThrow().get(0).getUser().getId()),
+            () -> assertEquals("Calle Barros Arana 789", addresses.orElseThrow().get(0).getAddressLine1())
+        );
+    }
+
 }
