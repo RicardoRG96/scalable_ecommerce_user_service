@@ -243,4 +243,26 @@ public class AddressServiceTest {
         );
     }
 
+    @Test
+    void testUpdate() {
+        Address updatedAddress = createUpdatedAddress();
+
+        when(addressRepository.findById(4L)).thenReturn(createAddress004());
+        when(addressRepository.save(any())).thenReturn(updatedAddress);
+
+        Optional<Address> addressUpdated = addressService.update(updatedAddress, 4L);
+
+        assertAll(
+            () -> assertTrue(addressUpdated.isPresent()),
+            () -> assertEquals("Depto en La Serena", addressUpdated.orElseThrow().getTitle()),
+            () -> assertEquals("Avenida del Mar 222", addressUpdated.orElseThrow().getAddressLine1()),
+            () -> assertEquals("Departamento 12A", addressUpdated.orElseThrow().getAddressLine2()),
+            () -> assertEquals("Chile", addressUpdated.orElseThrow().getCountry()),
+            () -> assertEquals("La Serena", addressUpdated.orElseThrow().getCity()),
+            () -> assertEquals("La Serena", addressUpdated.orElseThrow().getCommune()),
+            () -> assertEquals("1720000", addressUpdated.orElseThrow().getPostalCode()),
+            () -> assertEquals("Frente a la playa del faro", addressUpdated.orElseThrow().getLandmark())
+        );
+    }
+
 }

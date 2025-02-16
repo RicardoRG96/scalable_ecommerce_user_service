@@ -165,4 +165,13 @@ public class AddressServiceTestData {
         return address;
     }
 
+    public static Address createUpdatedAddress() {
+        Address address = createAddress004().orElseThrow();
+
+        address.setTitle("Depto en La Serena");
+        address.setLandmark("Frente a la playa del faro");
+
+        return address;
+    }
+
 }
