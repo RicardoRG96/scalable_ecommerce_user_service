@@ -265,4 +265,13 @@ public class AddressServiceTest {
         );
     }
 
+    @Test
+    void testDelete() {
+        doNothing().when(addressRepository).deleteById(3L);
+
+        addressService.delete(3L);
+
+        verify(addressRepository, times(1)).deleteById(3L);
+    }
+
 }
