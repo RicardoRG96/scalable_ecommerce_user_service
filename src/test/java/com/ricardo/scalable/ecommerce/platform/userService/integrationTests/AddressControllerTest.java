@@ -3,6 +3,7 @@ package com.ricardo.scalable.ecommerce.platform.userService.integrationTests;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
+import org.checkerframework.checker.units.qual.t;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -110,6 +111,117 @@ public class AddressControllerTest {
     void testGetAddressByUserIdNotFound() {
         client.get()
                 .uri("/addresses/user/100")
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
+    @Order(5)
+    void testGetAddressByUserIdAndTitle() {
+        client.get()
+                .uri("/addresses/user/1/title/Casa en Antofagasta")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                                () -> assertNotNull(json),
+                                () -> assertTrue(json.isArray()),
+                                () -> assertEquals(1, json.size()),
+                                () -> assertEquals(1L, json.get(0).path("id").asLong()),
+                                () -> assertEquals(1L, json.get(0).path("user").path("id").asLong()),
+                                () -> assertEquals("Casa en Antofagasta", json.get(0).path("title").asText()),
+                                () -> assertEquals("Avenida Argentina 123", json.get(0).path("addressLine1").asText())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(6)
+    void testGetAddressByUserIdAndTitleNotFound() {
+        client.get()
+                .uri("/addresses/user/1/title/Casa en Rio de janeiro")
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
+    @Order(7)
+    void testGetAddressByUserIdAndAddressLine1() {
+        client.get()
+                .uri("/addresses/user/2/addressLine1/Avenida Diego Portales 789")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                                () -> assertNotNull(json),
+                                () -> assertTrue(json.isArray()),
+                                () -> assertEquals(1, json.size()),
+                                () -> assertEquals(3L, json.get(0).path("id").asLong()),
+                                () -> assertEquals(2L, json.get(0).path("user").path("id").asLong()),
+                                () -> assertEquals("Departamento en Puerto Montt", json.get(0).path("title").asText()),
+                                () -> assertEquals("Avenida Diego Portales 789", json.get(0).path("addressLine1").asText())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(8)
+    void testGetAddressByUserIdAndAddressLine1NotFound() {
+        client.get()
+                .uri("/addresses/user/2/addressLine1/not exists")
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
+    @Order(9)
+    void testGetAddressByUserIdAndCountry() {
+        client.get()
+                .uri("/addresses/user/1/country/Chile")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                                () -> assertNotNull(json),
+                                () -> assertTrue(json.isArray()),
+                                () -> assertEquals(2, json.size()),
+                                () -> assertEquals(1L, json.get(0).path("id").asLong()),
+                                () -> assertEquals(2L, json.get(1).path("id").asLong()),
+                                () -> assertEquals(1L, json.get(1).path("user").path("id").asLong()),
+                                () -> assertEquals("Casa en Antofagasta", json.get(0).path("title").asText()),
+                                () -> assertEquals("Avenida Argentina 123", json.get(0).path("addressLine1").asText()),
+                                () -> assertEquals("Oficina en Rancagua", json.get(1).path("title").asText()),
+                                () -> assertEquals("Calle Estado 456", json.get(1).path("addressLine1").asText())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(10)
+    void testGetAddressByUserIdAndCountryNotFound() {
+        client.get()
+                .uri("/addresses/user/1/country/Argentina")
                 .exchange()
                 .expectStatus().isNotFound();
     }
