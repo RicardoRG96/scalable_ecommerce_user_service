@@ -1,9 +1,9 @@
 package com.ricardo.scalable.ecommerce.platform.userService.integrationTests;
 
+import static com.ricardo.scalable.ecommerce.platform.userService.services.testData.AddressControllerTestData.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
-import org.checkerframework.checker.units.qual.t;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -18,6 +18,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.AddressCreationDto;
 
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -397,6 +398,68 @@ public class AddressControllerTest {
                         e.printStackTrace();
                     }
                 });
+    }
+
+    @Test
+    @Order(20)
+    void testCreateAddress() {
+        AddressCreationDto requestBody = createAddressCreationDto();
+
+        client.post()
+                .uri("/addresses")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBody)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                                () -> assertNotNull(json),
+                                () -> assertEquals(7L, json.path("id").asLong()),
+                                () -> assertEquals(1L, json.path("user").path("id").asLong()),
+                                () -> assertEquals("Casa en Viña del Mar", json.path("title").asText()),
+                                () -> assertEquals("Avenida San Martín 456", json.path("addressLine1").asText()),
+                                () -> assertEquals("Departamento 3C", json.path("addressLine2").asText()),
+                                () -> assertEquals("Chile", json.path("country").asText()),
+                                () -> assertEquals("Viña del Mar", json.path("city").asText()),
+                                () -> assertEquals("Viña del Mar", json.path("commune").asText()),
+                                () -> assertEquals("2520000", json.path("postalCode").asText()),
+                                () -> assertEquals("Cerca del Reloj de Flores", json.path("landmark").asText())
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(21)
+    void testCreateAddressBadRequest() {
+        AddressCreationDto requestBody = new AddressCreationDto();
+
+        client.post()
+                .uri("/addresses")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBody)
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    @Test
+    @Order(22)
+    void testCreateAddressNotfound() {
+        AddressCreationDto requestBody = createAddressCreationDto();
+        requestBody.setUserId(100L);
+
+        client.post()
+                .uri("/addresses")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBody)
+                .exchange()
+                .expectStatus().isNotFound();
     }
 
     @Test
