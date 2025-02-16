@@ -101,4 +101,18 @@ public class AddressServiceTestData {
         return Optional.of(address);
     }
 
+    public static Optional<List<Address>> createListOfAddressWithUserId1() {
+        Address address1 = createAddress001().orElseThrow();
+        Address address3 = createAddress003().orElseThrow();
+
+        return Optional.of(List.of(address1, address3));
+    }
+
+    public static Optional<List<Address>> createListOfAddressWithUserId2() {
+        Address address2 = createAddress002().orElseThrow();
+        Address address4 = createAddress004().orElseThrow();
+
+        return Optional.of(List.of(address2, address4));
+    }
+
 }
