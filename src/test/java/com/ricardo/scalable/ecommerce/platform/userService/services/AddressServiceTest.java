@@ -17,8 +17,10 @@ import static org.mockito.Mockito.*;
 import com.ricardo.scalable.ecommerce.platform.userService.entities.Address;
 import com.ricardo.scalable.ecommerce.platform.userService.repositories.AddressRepository;
 import com.ricardo.scalable.ecommerce.platform.userService.repositories.UserRepository;
+import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.AddressCreationDto;
 
 import static com.ricardo.scalable.ecommerce.platform.userService.services.testData.AddressServiceTestData.*;
+import static com.ricardo.scalable.ecommerce.platform.userService.services.testData.UserServiceTestData.*;
 
 @SpringBootTest
 public class AddressServiceTest {
@@ -194,6 +196,50 @@ public class AddressServiceTest {
             () -> assertEquals(1L, addresses.orElseThrow().get(0).getUser().getId()),
             () -> assertEquals("Cerca del Reloj de Flores", addresses.orElseThrow().get(0).getLandmark()),
             () -> assertEquals("Avenida San Martín 456", addresses.orElseThrow().get(0).getAddressLine1())
+        );
+    }
+
+    @Test
+    void testFindAll() {
+        when(addressRepository.findAll()).thenReturn(createListOfAddresses());
+
+        List<Address> addresses = (List<Address>) addressService.findAll();
+
+        assertAll(
+            () -> assertNotNull(addresses),
+            () -> assertEquals(4, addresses.size()),
+            () -> assertEquals("Casa en Viña del Mar", addresses.get(0).getTitle()),
+            () -> assertEquals("Oficina en Concepción", addresses.get(1).getTitle()),
+            () -> assertEquals("Casa en Valparaíso", addresses.get(2).getTitle()),
+            () -> assertEquals("Departamento en La Serena", addresses.get(3).getTitle()),
+            () -> assertEquals("Avenida San Martín 456", addresses.get(0).getAddressLine1()),
+            () -> assertEquals("Calle Barros Arana 789", addresses.get(1).getAddressLine1()),
+            () -> assertEquals("Subida Ecuador 101", addresses.get(2).getAddressLine1()),
+            () -> assertEquals("Avenida del Mar 222", addresses.get(3).getAddressLine1())
+        );
+    }
+
+    @Test
+    void testSave() {
+        AddressCreationDto addressCreationRequest = createAddressCreationDto();
+        Address addressResult = createAddressCreationResponse();
+
+        when(userRepository.findById(2L)).thenReturn(createUser002());
+        when(addressRepository.save(any())).thenReturn(addressResult);
+
+        Optional<Address> addressSaved = addressService.save(addressCreationRequest);
+
+        assertAll(
+            () -> assertTrue(addressSaved.isPresent()),
+            () -> assertEquals(2L, addressSaved.orElseThrow().getUser().getId()),
+            () -> assertEquals("Casa en Santiago", addressSaved.orElseThrow().getTitle()),
+            () -> assertEquals("Avenida Providencia 123", addressSaved.orElseThrow().getAddressLine1()),
+            () -> assertEquals("Departamento 5B", addressSaved.orElseThrow().getAddressLine2()),
+            () -> assertEquals("Chile", addressSaved.orElseThrow().getCountry()),
+            () -> assertEquals("Santiago", addressSaved.orElseThrow().getCity()),
+            () -> assertEquals("Providencia", addressSaved.orElseThrow().getCommune()),
+            () -> assertEquals("7500000", addressSaved.orElseThrow().getPostalCode()),
+            () -> assertEquals("Cerca del Costanera Center", addressSaved.orElseThrow().getLandmark())
         );
     }
 

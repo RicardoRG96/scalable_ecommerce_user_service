@@ -9,10 +9,11 @@ import java.util.Optional;
 
 import com.ricardo.scalable.ecommerce.platform.userService.entities.Address;
 import com.ricardo.scalable.ecommerce.platform.userService.entities.User;
+import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.AddressCreationDto;
 
 public class AddressServiceTestData {
 
-    public static List<Address> createListOfAddress() {
+    public static List<Address> createListOfAddresses() {
         Address address1 = createAddress001().orElseThrow();
         Address address2 = createAddress002().orElseThrow();
         Address address3 = createAddress003().orElseThrow();
@@ -127,6 +128,41 @@ public class AddressServiceTestData {
         Address address4 = createAddress004().orElseThrow();
 
         return Optional.of(List.of(address2, address4));
+    }
+
+    public static AddressCreationDto createAddressCreationDto() {
+        AddressCreationDto addressCreationDto = new AddressCreationDto();
+
+        addressCreationDto.setUserId(2L);
+        addressCreationDto.setTitle("Casa en Santiago");
+        addressCreationDto.setAddressLine1("Avenida Providencia 123");
+        addressCreationDto.setAddressLine2("Departamento 5B");
+        addressCreationDto.setCountry("Chile");
+        addressCreationDto.setCity("Santiago");
+        addressCreationDto.setCommune("Providencia");
+        addressCreationDto.setPostalCode("7500000");
+        addressCreationDto.setLandmark("Cerca del Costanera Center");
+
+        return addressCreationDto;
+    }
+
+    public static Address createAddressCreationResponse() {
+        Address address = new Address();
+
+        address.setId(5L);
+        address.setUser(createUser002().orElseThrow());
+        address.setTitle("Casa en Santiago");
+        address.setAddressLine1("Avenida Providencia 123");
+        address.setAddressLine2("Departamento 5B");
+        address.setCountry("Chile");
+        address.setCity("Santiago");
+        address.setCommune("Providencia");
+        address.setPostalCode("7500000");
+        address.setLandmark("Cerca del Costanera Center");
+        address.setCreatedAt(Timestamp.from(Instant.now()));
+        address.setUpdatedAt(Timestamp.from(Instant.now()));
+
+        return address;
     }
 
 }
