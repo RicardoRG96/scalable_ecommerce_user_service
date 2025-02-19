@@ -13,6 +13,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "addresses")
@@ -24,6 +25,7 @@ public class Address {
 
     @JoinColumn(name = "user_id")
     @ManyToOne
+    @NotNull
     private User user;
 
     @NotBlank
