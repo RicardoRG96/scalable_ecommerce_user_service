@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.ricardo.scalable.ecommerce.platform.userService.entities.Wishlist;
+import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.WishlistCreationDto;
 
 public interface WishlistService {
 
@@ -13,11 +14,11 @@ public interface WishlistService {
 
     Optional<List<Wishlist>> findByProductSkuId(Long productSkuId);
 
-    Iterable<Wishlist> findAll();
+    List<Wishlist> findAll();
 
-    Optional<Wishlist> save(Wishlist wishlist);
+    Optional<Wishlist> save(WishlistCreationDto wishlist);
 
-    Optional<Wishlist> update(Wishlist wishlist);
+    Optional<Wishlist> update(Wishlist wishlist, Long id);
 
     void delete(Long id);
 
