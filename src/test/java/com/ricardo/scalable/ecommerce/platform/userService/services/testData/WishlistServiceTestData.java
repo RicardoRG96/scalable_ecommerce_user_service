@@ -68,7 +68,7 @@ public class WishlistServiceTestData {
 
     public static Optional<Wishlist> createWishlist004() {
         User user = createUser002().orElseThrow();
-        ProductSku productSku = createProductSku004().orElseThrow();
+        ProductSku productSku = createProductSku001().orElseThrow();
         Wishlist wishlist = new Wishlist();
         wishlist.setId(4L);
         wishlist.setUser(user);
@@ -79,7 +79,7 @@ public class WishlistServiceTestData {
 
     public static Optional<Wishlist> createWishlist005() {
         User user = createUser002().orElseThrow();
-        ProductSku productSku = createProductSku005().orElseThrow();
+        ProductSku productSku = createProductSku004().orElseThrow();
         Wishlist wishlist = new Wishlist();
         wishlist.setId(5L);
         wishlist.setUser(user);
@@ -90,7 +90,7 @@ public class WishlistServiceTestData {
 
     public static Optional<Wishlist> createWishlist006() {
         User user = createUser002().orElseThrow();
-        ProductSku productSku = createProductSku006().orElseThrow();
+        ProductSku productSku = createProductSku005().orElseThrow();
         Wishlist wishlist = new Wishlist();
         wishlist.setId(6L);
         wishlist.setUser(user);
@@ -108,6 +108,48 @@ public class WishlistServiceTestData {
         wishlist.setProductSku(productSku);
 
         return Optional.of(wishlist);
+    }
+
+    public static Optional<List<Wishlist>> createListOfWishlistByUserId1() {
+        Wishlist wishlist1 = createWishlist001().orElseThrow();
+        Wishlist wishlist2 = createWishlist002().orElseThrow();
+        Wishlist wishlist3 = createWishlist003().orElseThrow();
+
+        return Optional.of(
+            List.of(
+                wishlist1,
+                wishlist2,
+                wishlist3
+            )
+        );
+    }
+
+    public static Optional<List<Wishlist>> createListOfWishlistByUserId2() {
+        Wishlist wishlist4 = createWishlist004().orElseThrow();
+        Wishlist wishlist5 = createWishlist005().orElseThrow();
+        Wishlist wishlist6 = createWishlist006().orElseThrow();
+        Wishlist wishlist7 = createWishlist007().orElseThrow();
+
+        return Optional.of(
+            List.of(
+                wishlist4,
+                wishlist5,
+                wishlist6,
+                wishlist7
+            )
+        );
+    }
+
+    public static Optional<List<Wishlist>> createListOfWishlistByProductSkuId1() {
+        Wishlist wishlist1 = createWishlist001().orElseThrow();
+        Wishlist wishlist4 = createWishlist004().orElseThrow();
+
+        return Optional.of(
+            List.of(
+                wishlist1,
+                wishlist4
+            )
+        );
     }
 
 }
