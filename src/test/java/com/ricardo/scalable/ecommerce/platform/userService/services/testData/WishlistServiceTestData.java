@@ -35,7 +35,11 @@ public class WishlistServiceTestData {
     public static Optional<Wishlist> createWishlist001() {
         User user = createUser001().orElseThrow();
         ProductSku productSku = createProductSku001().orElseThrow();
-        Wishlist wishlist = new Wishlist(user, productSku);
+        Wishlist wishlist = new Wishlist();
+        wishlist.setId(1L);
+        wishlist.setUser(user);
+        wishlist.setProductSku(productSku);
+    
         return Optional.of(wishlist);
     }
 
@@ -43,43 +47,67 @@ public class WishlistServiceTestData {
     public static Optional<Wishlist> createWishlist002() {
         User user = createUser001().orElseThrow();
         ProductSku productSku = createProductSku002().orElseThrow();
-        Wishlist wishlist = new Wishlist(user, productSku);
+        Wishlist wishlist = new Wishlist();
+        wishlist.setId(2L);
+        wishlist.setUser(user);
+        wishlist.setProductSku(productSku);
+
         return Optional.of(wishlist);
     }
 
     public static Optional<Wishlist> createWishlist003() {
         User user = createUser001().orElseThrow();
         ProductSku productSku = createProductSku003().orElseThrow();
-        Wishlist wishlist = new Wishlist(user, productSku);
+        Wishlist wishlist = new Wishlist();
+        wishlist.setId(3L);
+        wishlist.setUser(user);
+        wishlist.setProductSku(productSku);
+
         return Optional.of(wishlist);
     }
 
     public static Optional<Wishlist> createWishlist004() {
         User user = createUser002().orElseThrow();
         ProductSku productSku = createProductSku004().orElseThrow();
-        Wishlist wishlist = new Wishlist(user, productSku);
+        Wishlist wishlist = new Wishlist();
+        wishlist.setId(4L);
+        wishlist.setUser(user);
+        wishlist.setProductSku(productSku);
+
         return Optional.of(wishlist);
     }
 
     public static Optional<Wishlist> createWishlist005() {
         User user = createUser002().orElseThrow();
         ProductSku productSku = createProductSku005().orElseThrow();
-        Wishlist wishlist = new Wishlist(user, productSku);
+        Wishlist wishlist = new Wishlist();
+        wishlist.setId(5L);
+        wishlist.setUser(user);
+        wishlist.setProductSku(productSku);
+
         return Optional.of(wishlist);
     }
 
     public static Optional<Wishlist> createWishlist006() {
         User user = createUser002().orElseThrow();
         ProductSku productSku = createProductSku006().orElseThrow();
-        Wishlist wishlist = new Wishlist(user, productSku);
+        Wishlist wishlist = new Wishlist();
+        wishlist.setId(6L);
+        wishlist.setUser(user);
+        wishlist.setProductSku(productSku);
+        
         return Optional.of(wishlist);
     }
 
     public static Optional<Wishlist> createWishlist007() {
         User user = createUser002().orElseThrow();
         ProductSku productSku = createProductSku007().orElseThrow();
-        Wishlist wishlist = new Wishlist(user, productSku);
+        Wishlist wishlist = new Wishlist();
+        wishlist.setId(7L);
+        wishlist.setUser(user);
+        wishlist.setProductSku(productSku);
+
         return Optional.of(wishlist);
     }
-    
+
 }
