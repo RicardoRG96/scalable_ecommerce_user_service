@@ -97,7 +97,7 @@ public class WishlistController {
 
     @PutMapping("/wishlist/{id}")
     public ResponseEntity<?> updateWishlist(
-        @Valid @RequestBody Wishlist wishlist,
+        @Valid @RequestBody WishlistCreationDto wishlist,
         @PathVariable Long id,
         BindingResult result
     ) {

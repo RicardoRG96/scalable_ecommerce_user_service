@@ -18,7 +18,7 @@ public interface WishlistService {
 
     Optional<Wishlist> save(WishlistCreationDto wishlist);
 
-    Optional<Wishlist> update(Wishlist wishlist, Long id);
+    Optional<Wishlist> update(WishlistCreationDto wishlist, Long id);
 
     void delete(Long id);
 

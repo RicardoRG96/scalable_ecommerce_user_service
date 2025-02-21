@@ -15,6 +15,8 @@ import com.ricardo.scalable.ecommerce.platform.userService.repositories.UserRepo
 import com.ricardo.scalable.ecommerce.platform.userService.repositories.WishlistRepository;
 import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.WishlistCreationDto;
 
+import feign.FeignException;
+
 @Service
 public class WishlistServiceImpl implements WishlistService {
 
@@ -54,31 +56,45 @@ public class WishlistServiceImpl implements WishlistService {
     @Override
     @Transactional
     public Optional<Wishlist> save(WishlistCreationDto wishlist) {
-        Long userId = wishlist.getUserId();
-        Long productSkuId = wishlist.getProductSkuId();
-        Optional<User> user = userRepository.findById(userId);
-        Optional<ProductSku> productSku = Optional.of(productSkuClient.getById(productSkuId));
+        try {
+            Long userId = wishlist.getUserId();
+            Long productSkuId = wishlist.getProductSkuId();
+            Optional<User> user = userRepository.findById(userId);
+            ProductSku productSku = productSkuClient.getById(productSkuId);
 
-        if (user.isPresent() && productSku.isPresent()) {
-            Wishlist newWishlist = new Wishlist();
-            newWishlist.setUser(user.orElseThrow());
-            newWishlist.setProductSku(productSku.orElseThrow());
+            if (user.isPresent()) {
+                Wishlist newWishlist = new Wishlist();
+                newWishlist.setUser(user.orElseThrow());
+                newWishlist.setProductSku(productSku);
 
-            return Optional.of(wishlistRepository.save(newWishlist));
+                return Optional.of(wishlistRepository.save(newWishlist));
+            }
+            return Optional.empty();
+        } catch (FeignException e) {
+            return Optional.empty();
         }
-        return Optional.empty();
     }
 
     @Override
     @Transactional
-    public Optional<Wishlist> update(Wishlist wishlist, Long id) {
-        Optional<Wishlist> dbWishlist = wishlistRepository.findById(id);
+    public Optional<Wishlist> update(WishlistCreationDto wishlist, Long id) {
+        try {
+            Optional<Wishlist> dbWishlist = wishlistRepository.findById(id);
+            Optional<User> user = userRepository.findById(wishlist.getUserId());
+            ProductSku productSku = productSkuClient.getById(wishlist.getProductSkuId());
 
-        return dbWishlist.map(w -> {
-            w.setUser(wishlist.getUser());
-            w.setProductSku(wishlist.getProductSku());
-            return Optional.of(wishlistRepository.save(w));
-        }).orElseGet(Optional::empty);
+            if (user.isEmpty()) {
+                return Optional.empty();
+            }
+
+            return dbWishlist.map(w -> {
+                w.setUser(user.orElseThrow());
+                w.setProductSku(productSku);
+                return Optional.of(wishlistRepository.save(w));
+            }).orElseGet(Optional::empty);
+        } catch (FeignException e) {
+            return Optional.empty();
+        }
     }
 
     @Override
