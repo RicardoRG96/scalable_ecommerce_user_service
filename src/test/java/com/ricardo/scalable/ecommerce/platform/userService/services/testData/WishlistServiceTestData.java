@@ -6,6 +6,7 @@ import java.util.Optional;
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.ProductSku;
 import com.ricardo.scalable.ecommerce.platform.userService.entities.User;
 import com.ricardo.scalable.ecommerce.platform.userService.entities.Wishlist;
+import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.WishlistCreationDto;
 
 import static com.ricardo.scalable.ecommerce.platform.userService.services.testData.UserServiceTestData.*;
 import static com.ricardo.scalable.ecommerce.platform.userService.services.testData.productSku.ProductSkuTestData.*;
@@ -163,5 +164,23 @@ public class WishlistServiceTestData {
             )
         );
     }
+    
+    public static WishlistCreationDto createWishlistCreationDto() {
+        WishlistCreationDto wishlist = new WishlistCreationDto();
+        wishlist.setUserId(1L);
+        wishlist.setProductSkuId(6L);
 
+        return wishlist;
+    }
+
+    public static Wishlist createWishlistCreationResponse() {
+        User user = createUser001().orElseThrow();
+        ProductSku productSku = createProductSku006().orElseThrow();
+        Wishlist wishlist = new Wishlist();
+        wishlist.setId(8L);
+        wishlist.setUser(user);
+        wishlist.setProductSku(productSku);
+
+        return wishlist;
+    }
 }

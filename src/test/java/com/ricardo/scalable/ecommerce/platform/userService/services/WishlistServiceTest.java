@@ -97,4 +97,24 @@ public class WishlistServiceTest {
         );
     }
 
+    @Test
+    void testFindAll() {
+        when(wishlistRepository.findAll()).thenReturn(createListOfWishlist());
+
+        List<Wishlist> wishlistList = wishlistService.findAll();
+        
+        assertAll(
+            () -> assertEquals(7, wishlistList.size()),
+            () -> assertEquals(1L, wishlistList.get(0).getId()),
+            () -> assertEquals(2L, wishlistList.get(1).getId()),
+            () -> assertEquals(3L, wishlistList.get(2).getId()),
+            () -> assertEquals(4L, wishlistList.get(3).getId()),
+            () -> assertEquals(5L, wishlistList.get(4).getId()),
+            () -> assertEquals(1L, wishlistList.get(0).getUser().getId()),
+            () -> assertEquals(1L, wishlistList.get(1).getUser().getId()),
+            () -> assertEquals(1L, wishlistList.get(0).getProductSku().getId()),
+            () -> assertEquals(1L, wishlistList.get(3).getProductSku().getId())
+        );
+    }
+
 }
