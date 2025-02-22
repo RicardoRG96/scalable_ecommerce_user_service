@@ -325,6 +325,43 @@ public class WishlistControllerTest {
     }
 
     @Test
+    @Order(14)
+    void testDeleteWishlist() {
+        client.delete()
+                .uri("/wishlist/10")
+                .exchange()
+                .expectStatus().isNoContent();
+
+        client.get()
+                .uri("/wishlist")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertTrue(json.isArray()),
+                            () -> assertEquals(9, json.size())
+                        );
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(15)
+    void testGetDeletedWishlist() {
+        client.get()
+                .uri("/wishlist/10")
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
     void testProfile() {
         assertArrayEquals(new String[]{"test"}, env.getActiveProfiles());
     }
