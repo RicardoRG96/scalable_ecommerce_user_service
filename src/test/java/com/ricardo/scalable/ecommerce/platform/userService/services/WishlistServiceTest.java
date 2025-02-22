@@ -159,4 +159,11 @@ public class WishlistServiceTest {
         );
     }
 
+    @Test
+    void testDelete() {
+        wishlistService.delete(1L);
+
+        verify(wishlistRepository, times(1)).deleteById(1L);
+    }
+
 }
