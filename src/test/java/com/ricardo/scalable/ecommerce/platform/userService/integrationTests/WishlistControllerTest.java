@@ -67,13 +67,58 @@ public class WishlistControllerTest {
     }
 
     @Test
+    @Order(2)
+    void testGetByIdNotFound() {
+        client.get()
+                .uri("/wishlist/100")
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
+    @Order(3)
+    void testGetByUserId() {
+        client.get()
+                .uri("/wishlist/user/1")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertEquals(3, json.size()),
+                            () -> assertEquals(1, json.get(0).path("id").asLong()),
+                            () -> assertEquals(1, json.get(0).path("user").path("id").asLong()),
+                            () -> assertEquals(1, json.get(0).path("productSku").path("id").asLong()),
+                            () -> assertEquals("alejandro", json.get(0).path("user").path("firstName").asText()),
+                            () -> assertEquals("Balon premier league 2025", json.get(2).path("productSku").path("product").path("name").asText())
+                        );
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(4)
+    void testGetByUserIdNotFound() {
+        client.get()
+                .uri("/wishlist/user/100")
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
     void testProfile() {
         assertArrayEquals(new String[]{"test"}, env.getActiveProfiles());
     }
 
     @Test
     void testApplicationPropertiesFile() {
-        assertEquals("jdbc:h2:mem:public", env.getProperty("spring.datasource.url"));
+        assertEquals("jdbc:h2:mem:public;NON_KEYWORDS=value", env.getProperty("spring.datasource.url"));
     }
 
 }
