@@ -112,6 +112,47 @@ public class WishlistControllerTest {
     }
 
     @Test
+    @Order(5)
+    void testGetByProductSkuId() {
+        client.get()
+                .uri("/wishlist/product-sku/1")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertEquals(2, json.size()),
+                            () -> assertEquals(1, json.get(0).path("id").asLong()),
+                            () -> assertEquals(7, json.get(1).path("id").asLong()),
+                            () -> assertEquals(1, json.get(0).path("user").path("id").asLong()),
+                            () -> assertEquals(3, json.get(1).path("user").path("id").asLong()),
+                            () -> assertEquals(1, json.get(0).path("productSku").path("id").asLong()),
+                            () -> assertEquals(1, json.get(1).path("productSku").path("id").asLong()),
+                            () -> assertEquals("alejandro", json.get(0).path("user").path("firstName").asText()),
+                            () -> assertEquals("pepe", json.get(1).path("user").path("firstName").asText()),
+                            () -> assertEquals("iPhone 15", json.get(0).path("productSku").path("product").path("name").asText()),
+                            () -> assertEquals("iPhone 15", json.get(1).path("productSku").path("product").path("name").asText())
+                        );
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(6)
+    void testGetByProductSkuIdNotFound() {
+        client.get()
+                .uri("/wishlist/product-sku/100")
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
     void testProfile() {
         assertArrayEquals(new String[]{"test"}, env.getActiveProfiles());
     }
