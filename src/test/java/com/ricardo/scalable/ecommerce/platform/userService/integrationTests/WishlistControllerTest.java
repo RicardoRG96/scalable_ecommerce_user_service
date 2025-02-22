@@ -9,6 +9,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.WishlistCreationDto;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -173,6 +174,80 @@ public class WishlistControllerTest {
                         e.printStackTrace();
                     }
                 });
+    }
+
+    @Test
+    @Order(8)
+    void testCreateWishlist() {
+        WishlistCreationDto requestBody = new WishlistCreationDto(2L, 9L);
+
+        client.post()
+                .uri("/wishlist")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBody)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertEquals(10, json.path("id").asLong()),
+                            () -> assertEquals(2, json.path("user").path("id").asLong()),
+                            () -> assertEquals(9, json.path("productSku").path("id").asLong()),
+                            () -> assertEquals("ester", json.path("user").path("firstName").asText()),
+                            () -> assertEquals("Polera Puma", json.path("productSku").path("product").path("name").asText())
+                        );
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(9)
+    void testCreateWishlistBadRequest() {
+        WishlistCreationDto requestBody = new WishlistCreationDto();
+
+        client.post()
+                .uri("/wishlist")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBody)
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    @Test
+    @Order(10)
+    void testCreateWishlistNotFound() {
+        WishlistCreationDto requestBodyWithNotExistingUserId = new WishlistCreationDto(100L, 1L);
+
+        client.post()
+                .uri("/wishlist")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBodyWithNotExistingUserId)
+                .exchange()
+                .expectStatus().isNotFound();
+
+        WishlistCreationDto requestBodyWithNotExistingProductSkuId = new WishlistCreationDto(1L, 100L);
+
+        client.post()
+                .uri("/wishlist")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBodyWithNotExistingProductSkuId)
+                .exchange()
+                .expectStatus().isNotFound();
+
+        WishlistCreationDto requestBodyWithNotExistingIds = new WishlistCreationDto(100L, 100L);
+
+        client.post()
+                .uri("/wishlist")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBodyWithNotExistingIds)
+                .exchange()
+                .expectStatus().isNotFound();
     }
 
     @Test

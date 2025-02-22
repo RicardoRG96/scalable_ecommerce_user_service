@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -82,7 +83,7 @@ public class WishlistController {
         boolean isPresent = newWishlist.isPresent();
         
         if (isPresent) {
-            return ResponseEntity.ok(newWishlist.orElseThrow());
+            return ResponseEntity.status(HttpStatus.CREATED).body(newWishlist.orElseThrow());
         }
         return ResponseEntity.notFound().build();
     }
