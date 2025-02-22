@@ -74,4 +74,27 @@ public class WishlistServiceTest {
         );
     }
 
+    @Test
+    void testFindByProductSkuId() {
+        when(wishlistRepository.findByProductSkuId(1L)).thenReturn(createListOfWishlistByProductSkuId1());
+
+        Optional<List<Wishlist>> wishlistOptional = wishlistService.findByProductSkuId(1L);
+        
+        assertAll(
+            () -> assertTrue(wishlistOptional.isPresent()),
+            () -> assertEquals(1L, wishlistOptional.orElseThrow().get(0).getId()),
+            () -> assertEquals(4L, wishlistOptional.orElseThrow().get(1).getId()),
+            () -> assertEquals(1L, wishlistOptional.orElseThrow().get(0).getUser().getId()),
+            () -> assertEquals(2L, wishlistOptional.orElseThrow().get(1).getUser().getId()),
+            () -> assertEquals("Ricardo", wishlistOptional.orElseThrow().get(0).getUser().getFirstName()),
+            () -> assertEquals("Mateo", wishlistOptional.orElseThrow().get(1).getUser().getFirstName()),
+            () -> assertEquals("Retamal", wishlistOptional.orElseThrow().get(0).getUser().getLastName()),
+            () -> assertEquals("Retamal", wishlistOptional.orElseThrow().get(1).getUser().getLastName()),
+            () -> assertEquals(1L, wishlistOptional.orElseThrow().get(0).getProductSku().getId()),
+            () -> assertEquals("Notebook Samsung", wishlistOptional.orElseThrow().get(0).getProductSku().getProduct().getName()),
+            () -> assertEquals(1L, wishlistOptional.orElseThrow().get(1).getProductSku().getId()),
+            () -> assertEquals("Notebook Samsung", wishlistOptional.orElseThrow().get(1).getProductSku().getProduct().getName())
+        );
+    }
+
 }

@@ -152,4 +152,16 @@ public class WishlistServiceTestData {
         );
     }
 
+    public static Optional<List<Wishlist>> createListOfWishlistByProductSkuId() {
+        Wishlist wishlist1 = createWishlist001().orElseThrow();
+        Wishlist wishlist4 = createWishlist004().orElseThrow();
+
+        return Optional.of(
+            List.of(
+                wishlist1,
+                wishlist4
+            )
+        );
+    }
+
 }
