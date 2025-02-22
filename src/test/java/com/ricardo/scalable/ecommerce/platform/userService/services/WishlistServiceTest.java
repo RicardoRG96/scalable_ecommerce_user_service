@@ -139,4 +139,24 @@ public class WishlistServiceTest {
         );
     }
 
+    @Test
+    void testUpdate() {
+        WishlistCreationDto wishlistCreationRequest = new WishlistCreationDto(2L, 6L);
+        Wishlist updatedWishlist = createUpdatedWishlist();
+
+        when(wishlistRepository.findById(6L)).thenReturn(createWishlist006());
+        when(userRepository.findById(2L)).thenReturn(createUser002());
+        when(productSkuClient.getById(6L)).thenReturn(createProductSku006().orElseThrow());
+        when(wishlistRepository.save(any())).thenReturn(updatedWishlist);
+
+        Optional<Wishlist> wishlistOptional = wishlistService.update(wishlistCreationRequest, 6L);
+
+        assertAll(
+            () -> assertTrue(wishlistOptional.isPresent()),
+            () -> assertEquals(6L, wishlistOptional.orElseThrow().getId()),
+            () -> assertEquals(2L, wishlistOptional.orElseThrow().getUser().getId()),
+            () -> assertEquals(6L, wishlistOptional.orElseThrow().getProductSku().getId())
+        );
+    }
+
 }

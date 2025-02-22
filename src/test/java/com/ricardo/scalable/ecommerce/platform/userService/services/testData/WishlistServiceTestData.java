@@ -183,4 +183,15 @@ public class WishlistServiceTestData {
 
         return wishlist;
     }
+
+    public static Wishlist createUpdatedWishlist() {
+        User user = createUser002().orElseThrow();
+        ProductSku productSku = createProductSku006().orElseThrow();
+        Wishlist wishlist = createWishlist006().orElseThrow();
+
+        wishlist.setUser(user);
+        wishlist.setProductSku(productSku);
+
+        return wishlist;
+    }
 }
