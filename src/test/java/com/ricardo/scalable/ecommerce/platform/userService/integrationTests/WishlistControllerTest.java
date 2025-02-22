@@ -251,6 +251,80 @@ public class WishlistControllerTest {
     }
 
     @Test
+    @Order(11)
+    void testUpdateWishlist() {
+        WishlistCreationDto requestBody = new WishlistCreationDto(2L, 10L);
+
+        client.put()
+                .uri("/wishlist/10")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBody)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(res -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(res.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertEquals(10, json.path("id").asLong()),
+                            () -> assertEquals(2, json.path("user").path("id").asLong()),
+                            () -> assertEquals(10, json.path("productSku").path("id").asLong()),
+                            () -> assertEquals("ester", json.path("user").path("firstName").asText()),
+                            () -> assertEquals("Polera Puma", json.path("productSku").path("product").path("name").asText())
+                        );
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(12)
+    void testUpdateWishlistNotFound() {
+        WishlistCreationDto requestBody = new WishlistCreationDto(2L, 10L);
+
+        client.put()
+                .uri("/wishlist/100")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBody)
+                .exchange()
+                .expectStatus().isNotFound();
+
+        WishlistCreationDto requestBodyWithNotExistingUserId = new WishlistCreationDto(200L, 10L);
+
+        client.put()
+                .uri("/wishlist/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBodyWithNotExistingUserId)
+                .exchange()
+                .expectStatus().isNotFound();
+
+        WishlistCreationDto requestBodyWithNotExistingProductSkuId = new WishlistCreationDto(2L, 100L);
+
+        client.put()
+                .uri("/wishlist/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBodyWithNotExistingProductSkuId)
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
+    @Order(13)
+    void testUpdateWishlistBadRequest() {
+        WishlistCreationDto requestBody = new WishlistCreationDto();
+
+        client.put()
+                .uri("/wishlist/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBody)
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    @Test
     void testProfile() {
         assertArrayEquals(new String[]{"test"}, env.getActiveProfiles());
     }
