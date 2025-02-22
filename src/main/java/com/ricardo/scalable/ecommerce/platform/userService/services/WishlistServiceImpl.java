@@ -8,15 +8,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.ProductSku;
-import com.ricardo.scalable.ecommerce.platform.userService.clients.ProductSkuFeignClient;
 import com.ricardo.scalable.ecommerce.platform.userService.entities.User;
 import com.ricardo.scalable.ecommerce.platform.userService.entities.Wishlist;
 import com.ricardo.scalable.ecommerce.platform.userService.repositories.ProductSkuRepository;
 import com.ricardo.scalable.ecommerce.platform.userService.repositories.UserRepository;
 import com.ricardo.scalable.ecommerce.platform.userService.repositories.WishlistRepository;
 import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.WishlistCreationDto;
-
-import feign.FeignException;
 
 @Service
 public class WishlistServiceImpl implements WishlistService {
@@ -26,9 +23,6 @@ public class WishlistServiceImpl implements WishlistService {
 
     @Autowired
     private UserRepository userRepository;
-
-    // @Autowired
-    // private ProductSkuFeignClient productSkuClient;
 
     @Autowired
     private ProductSkuRepository productSkuRepository;
@@ -60,23 +54,6 @@ public class WishlistServiceImpl implements WishlistService {
     @Override
     @Transactional
     public Optional<Wishlist> save(WishlistCreationDto wishlist) {
-        // try {
-        //     Long userId = wishlist.getUserId();
-        //     Long productSkuId = wishlist.getProductSkuId();
-        //     Optional<User> user = userRepository.findById(userId);
-        //     ProductSku productSku = productSkuClient.getById(productSkuId);
-
-        //     if (user.isPresent()) {
-        //         Wishlist newWishlist = new Wishlist();
-        //         newWishlist.setUser(user.orElseThrow());
-        //         newWishlist.setProductSku(productSku);
-
-        //         return Optional.of(wishlistRepository.save(newWishlist));
-        //     }
-        //     return Optional.empty();
-        // } catch (FeignException e) {
-        //     return Optional.empty();
-        // }
         Long userId = wishlist.getUserId();
         Long productSkuId = wishlist.getProductSkuId();
         Optional<User> user = userRepository.findById(userId);
@@ -95,23 +72,6 @@ public class WishlistServiceImpl implements WishlistService {
     @Override
     @Transactional
     public Optional<Wishlist> update(WishlistCreationDto wishlist, Long id) {
-        // try {
-        //     Optional<Wishlist> dbWishlist = wishlistRepository.findById(id);
-        //     Optional<User> user = userRepository.findById(wishlist.getUserId());
-        //     ProductSku productSku = productSkuClient.getById(wishlist.getProductSkuId());
-
-        //     if (user.isEmpty()) {
-        //         return Optional.empty();
-        //     }
-
-        //     return dbWishlist.map(w -> {
-        //         w.setUser(user.orElseThrow());
-        //         w.setProductSku(productSku);
-        //         return Optional.of(wishlistRepository.save(w));
-        //     }).orElseGet(Optional::empty);
-        // } catch (FeignException e) {
-        //     return Optional.empty();
-        // }
         Optional<Wishlist> dbWishlist = wishlistRepository.findById(id);
         Optional<User> user = userRepository.findById(wishlist.getUserId());
         Optional<ProductSku> productSku = productSkuRepository.findById(wishlist.getProductSkuId());

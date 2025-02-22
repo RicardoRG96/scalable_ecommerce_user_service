@@ -12,8 +12,8 @@ import static org.mockito.Mockito.*;
 import java.util.List;
 import java.util.Optional;
 
-import com.ricardo.scalable.ecommerce.platform.userService.clients.ProductSkuFeignClient;
 import com.ricardo.scalable.ecommerce.platform.userService.entities.Wishlist;
+import com.ricardo.scalable.ecommerce.platform.userService.repositories.ProductSkuRepository;
 import com.ricardo.scalable.ecommerce.platform.userService.repositories.UserRepository;
 import com.ricardo.scalable.ecommerce.platform.userService.repositories.WishlistRepository;
 import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.WishlistCreationDto;
@@ -32,7 +32,7 @@ public class WishlistServiceTest {
     private UserRepository userRepository;
 
     @MockitoBean
-    private ProductSkuFeignClient productSkuClient;
+    private ProductSkuRepository productSkuRepository;
 
     @Autowired
     private WishlistService wishlistService;
@@ -126,7 +126,7 @@ public class WishlistServiceTest {
         Wishlist wishlistCreationResponse = createWishlistCreationResponse();
 
         when(userRepository.findById(1L)).thenReturn(createUser001());
-        when(productSkuClient.getById(6L)).thenReturn(createProductSku006().orElseThrow());
+        when(productSkuRepository.findById(6L)).thenReturn(createProductSku006());
         when(wishlistRepository.save(any())).thenReturn(wishlistCreationResponse);
 
         Optional<Wishlist> wishlistOptional = wishlistService.save(wishlistCreationRequest);
@@ -146,7 +146,7 @@ public class WishlistServiceTest {
 
         when(wishlistRepository.findById(6L)).thenReturn(createWishlist006());
         when(userRepository.findById(2L)).thenReturn(createUser002());
-        when(productSkuClient.getById(6L)).thenReturn(createProductSku006().orElseThrow());
+        when(productSkuRepository.findById(6L)).thenReturn(createProductSku006());
         when(wishlistRepository.save(any())).thenReturn(updatedWishlist);
 
         Optional<Wishlist> wishlistOptional = wishlistService.update(wishlistCreationRequest, 6L);
