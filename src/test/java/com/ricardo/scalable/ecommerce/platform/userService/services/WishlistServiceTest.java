@@ -16,8 +16,11 @@ import com.ricardo.scalable.ecommerce.platform.userService.clients.ProductSkuFei
 import com.ricardo.scalable.ecommerce.platform.userService.entities.Wishlist;
 import com.ricardo.scalable.ecommerce.platform.userService.repositories.UserRepository;
 import com.ricardo.scalable.ecommerce.platform.userService.repositories.WishlistRepository;
+import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.WishlistCreationDto;
 
 import static com.ricardo.scalable.ecommerce.platform.userService.services.testData.WishlistServiceTestData.*;
+import static com.ricardo.scalable.ecommerce.platform.userService.services.testData.UserServiceTestData.*;
+import static com.ricardo.scalable.ecommerce.platform.userService.services.testData.productSku.ProductSkuTestData.*;
 
 @SpringBootTest
 public class WishlistServiceTest {
@@ -114,6 +117,25 @@ public class WishlistServiceTest {
             () -> assertEquals(1L, wishlistList.get(1).getUser().getId()),
             () -> assertEquals(1L, wishlistList.get(0).getProductSku().getId()),
             () -> assertEquals(1L, wishlistList.get(3).getProductSku().getId())
+        );
+    }
+
+    @Test
+    void testSave() {
+        WishlistCreationDto wishlistCreationRequest = createWishlistCreationDto();
+        Wishlist wishlistCreationResponse = createWishlistCreationResponse();
+
+        when(userRepository.findById(1L)).thenReturn(createUser001());
+        when(productSkuClient.getById(6L)).thenReturn(createProductSku006().orElseThrow());
+        when(wishlistRepository.save(any())).thenReturn(wishlistCreationResponse);
+
+        Optional<Wishlist> wishlistOptional = wishlistService.save(wishlistCreationRequest);
+
+        assertAll(
+            () -> assertTrue(wishlistOptional.isPresent()),
+            () -> assertEquals(8L, wishlistOptional.orElseThrow().getId()),
+            () -> assertEquals(1L, wishlistOptional.orElseThrow().getUser().getId()),
+            () -> assertEquals(6L, wishlistOptional.orElseThrow().getProductSku().getId())
         );
     }
 
