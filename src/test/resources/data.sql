@@ -1,3 +1,5 @@
+SET NON_KEYWORDS VALUE;
+
 --users
 
 INSERT INTO users (avatar, first_name, last_name, username, email, password, birth_date, phone_number, enabled) VALUES 

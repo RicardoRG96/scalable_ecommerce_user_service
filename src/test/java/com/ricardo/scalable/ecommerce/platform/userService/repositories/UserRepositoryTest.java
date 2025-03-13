@@ -21,9 +21,6 @@ public class UserRepositoryTest {
         Optional<User> user1 = userRepository.findById(1L);
         Optional<User> user2 = userRepository.findById(2L);
 
-        // Optional<User> user1 = userRepository.findByUsername("ricardo");
-        // Optional<User> user2 = userRepository.findByUsername("mateo");
-
         assertTrue(user1.isPresent());
         assertTrue(user2.isPresent());
 
