@@ -53,6 +53,6 @@ CREATE TABLE IF NOT EXISTS product_skus (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (product_id) REFERENCES products(id),
-    FOREIGN KEY (size_attribue_id) REFERENCES product_attributes(id),
+    FOREIGN KEY (size_attribute_id) REFERENCES product_attributes(id),
     FOREIGN KEY (color_attribute_id) REFERENCES product_attributes(id)
 );
