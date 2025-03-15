@@ -1,5 +1,7 @@
 package com.ricardo.scalable.ecommerce.platform.userService.entities;
 
+import java.util.List;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
@@ -14,12 +16,21 @@ public class Role {
     @NotBlank
     private String name;
 
+    @ManyToMany(mappedBy = "roles")
+    private List<User> users;
+
     public Role() {
     }
 
     public Role(Long id, @NotBlank String name) {
         this.id = id;
         this.name = name;
+    }
+
+    public Role(Long id, @NotBlank String name, List<User> users) {
+        this.id = id;
+        this.name = name;
+        this.users = users;
     }
 
     public Long getId() {
@@ -36,6 +47,14 @@ public class Role {
 
     public void setName(@NotBlank String name) {
         this.name = name;
+    }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 
 }

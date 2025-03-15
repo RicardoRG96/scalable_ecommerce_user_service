@@ -54,12 +54,11 @@ public class User {
     private boolean admin;
 
     @JsonIgnoreProperties({ "handler", "hibernateLazyInitializer" })
-    @ManyToMany
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinTable(
             name = "users_roles",
             joinColumns = { @JoinColumn(name = "user_id") },
-            inverseJoinColumns = { @JoinColumn(name = "role_id") },
-            uniqueConstraints = { @UniqueConstraint(columnNames = { "user_id", "role_id" }) }
+            inverseJoinColumns = { @JoinColumn(name = "role_id") }
     )
     private List<Role> roles;
 
