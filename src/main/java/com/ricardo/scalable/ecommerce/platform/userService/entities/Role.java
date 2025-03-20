@@ -2,6 +2,8 @@ package com.ricardo.scalable.ecommerce.platform.userService.entities;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
@@ -16,6 +18,7 @@ public class Role {
     @NotBlank
     private String name;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "roles")
     private List<User> users;
 
