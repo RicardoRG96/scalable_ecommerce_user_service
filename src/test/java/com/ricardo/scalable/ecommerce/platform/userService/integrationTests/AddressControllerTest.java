@@ -573,7 +573,7 @@ public class AddressControllerTest {
 
     @Test
     void testApplicationPropertyFile() {
-        assertEquals("jdbc:h2:mem:public", env.getProperty("spring.datasource.url"));
+        assertEquals("jdbc:h2:mem:public;NON_KEYWORDS=value", env.getProperty("spring.datasource.url"));
     }
 
 }
