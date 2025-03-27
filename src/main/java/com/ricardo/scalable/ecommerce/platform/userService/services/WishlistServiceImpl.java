@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.ProductSku;
-import com.ricardo.scalable.ecommerce.platform.userService.entities.User;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.User;
 import com.ricardo.scalable.ecommerce.platform.userService.entities.Wishlist;
 import com.ricardo.scalable.ecommerce.platform.userService.repositories.ProductSkuRepository;
 import com.ricardo.scalable.ecommerce.platform.userService.repositories.UserRepository;

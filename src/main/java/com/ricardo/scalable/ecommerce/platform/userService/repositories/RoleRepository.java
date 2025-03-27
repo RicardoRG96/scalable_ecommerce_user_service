@@ -1,6 +1,6 @@
 package com.ricardo.scalable.ecommerce.platform.userService.repositories;
 
-import com.ricardo.scalable.ecommerce.platform.userService.entities.Role;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Role;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;

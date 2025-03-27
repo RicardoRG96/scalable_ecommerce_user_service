@@ -9,8 +9,8 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ricardo.scalable.ecommerce.platform.userService.entities.Role;
-import com.ricardo.scalable.ecommerce.platform.userService.entities.User;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Role;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.User;
 import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.UserRegisterDto;
 import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.UserUpdateInfoDto;
 import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.UserUpdatePasswordDto;

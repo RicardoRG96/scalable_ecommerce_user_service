@@ -1,6 +1,6 @@
 package com.ricardo.scalable.ecommerce.platform.userService.controllers;
 
-import com.ricardo.scalable.ecommerce.platform.userService.entities.User;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.User;
 import com.ricardo.scalable.ecommerce.platform.userService.exceptions.PasswordDoNotMatchException;
 import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.UserRegisterDto;
 import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.UserUpdateInfoDto;

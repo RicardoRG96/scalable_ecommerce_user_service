@@ -15,8 +15,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.ricardo.scalable.ecommerce.platform.userService.services.testData.UserServiceTestData.*;
-import com.ricardo.scalable.ecommerce.platform.userService.entities.Role;
-import com.ricardo.scalable.ecommerce.platform.userService.entities.User;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Role;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.User;
 import com.ricardo.scalable.ecommerce.platform.userService.exceptions.PasswordDoNotMatchException;
 
 import org.junit.jupiter.api.Test;

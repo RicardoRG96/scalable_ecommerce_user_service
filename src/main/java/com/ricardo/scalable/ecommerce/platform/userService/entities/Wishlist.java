@@ -16,6 +16,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.User;
+
 @Entity
 @Table(name = "wishlists")
 public class Wishlist {

@@ -6,8 +6,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ricardo.scalable.ecommerce.platform.userService.entities.Role;
-import com.ricardo.scalable.ecommerce.platform.userService.entities.User;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Role;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.User;
 import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.UserRegisterDto;
 import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.UserUpdateInfoDto;
 

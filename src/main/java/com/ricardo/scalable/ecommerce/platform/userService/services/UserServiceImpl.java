@@ -1,7 +1,7 @@
 package com.ricardo.scalable.ecommerce.platform.userService.services;
 
-import com.ricardo.scalable.ecommerce.platform.userService.entities.Role;
-import com.ricardo.scalable.ecommerce.platform.userService.entities.User;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Role;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.User;
 import com.ricardo.scalable.ecommerce.platform.userService.exceptions.PasswordDoNotMatchException;
 import com.ricardo.scalable.ecommerce.platform.userService.repositories.RoleRepository;
 import com.ricardo.scalable.ecommerce.platform.userService.repositories.UserRepository;

@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ricardo.scalable.ecommerce.platform.userService.entities.Address;
-import com.ricardo.scalable.ecommerce.platform.userService.entities.User;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.User;
 import com.ricardo.scalable.ecommerce.platform.userService.repositories.AddressRepository;
 import com.ricardo.scalable.ecommerce.platform.userService.repositories.UserRepository;
 import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.AddressCreationDto;

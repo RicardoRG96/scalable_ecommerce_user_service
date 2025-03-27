@@ -15,6 +15,8 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.User;
+
 @Entity
 @Table(name = "addresses")
 public class Address {
