@@ -1,8 +1,6 @@
 package com.ricardo.scalable.ecommerce.platform.userService.controllers;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ricardo.scalable.ecommerce.platform.userService.entities.Wishlist;
 import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.WishlistCreationDto;
 import com.ricardo.scalable.ecommerce.platform.userService.services.WishlistService;
+import static com.ricardo.scalable.ecommerce.platform.libs_common.validation.RequestBodyValidation.*;
 
 import jakarta.validation.Valid;
 
@@ -77,7 +76,7 @@ public class WishlistController {
         BindingResult result
     ) {
         if (result.hasErrors()) {
-            return this.validation(result);
+            return validation(result);
         }
         Optional<Wishlist> newWishlist = wishlistService.save(wishlist);
         boolean isPresent = newWishlist.isPresent();
@@ -88,14 +87,6 @@ public class WishlistController {
         return ResponseEntity.notFound().build();
     }
 
-    private ResponseEntity<?> validation(BindingResult result) {
-        Map<String, String> errors = new HashMap<>();
-        result.getFieldErrors()
-                .forEach(err -> errors.put(err.getField(), "El campo " + err.getField() + " " + err.getDefaultMessage()));
-        
-        return ResponseEntity.badRequest().body(errors);
-    }
-
     @PutMapping("/wishlist/{id}")
     public ResponseEntity<?> updateWishlist(
         @Valid @RequestBody WishlistCreationDto wishlist,
@@ -103,7 +94,7 @@ public class WishlistController {
         BindingResult result
     ) {
         if (result.hasErrors()) {
-            return this.validation(result);
+            return validation(result);
         }
         Optional<Wishlist> updatedWishlist = wishlistService.update(wishlist, id);
         boolean isPresent = updatedWishlist.isPresent();

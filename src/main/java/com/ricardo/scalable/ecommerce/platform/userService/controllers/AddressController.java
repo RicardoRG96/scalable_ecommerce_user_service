@@ -1,8 +1,6 @@
 package com.ricardo.scalable.ecommerce.platform.userService.controllers;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ricardo.scalable.ecommerce.platform.userService.entities.Address;
 import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.AddressCreationDto;
 import com.ricardo.scalable.ecommerce.platform.userService.services.AddressService;
+import static com.ricardo.scalable.ecommerce.platform.libs_common.validation.RequestBodyValidation.*;
 
 import jakarta.validation.Valid;
 
@@ -148,7 +147,7 @@ public class AddressController {
         BindingResult result
     ) {
         if (result.hasErrors()) {
-            return this.validation(result);
+            return validation(result);
         }
         Optional<Address> newAddress = addressService.save(address);
         boolean isPresent = newAddress.isPresent();
@@ -159,15 +158,6 @@ public class AddressController {
         return ResponseEntity.notFound().build();
     }
 
-    private ResponseEntity<?> validation(BindingResult result) {
-        Map<String, String> errors = new HashMap<>();
-
-        result.getFieldErrors()
-                .forEach(err -> errors.put(err.getField(), "El campo " + err.getField() + " " + err.getDefaultMessage()));
-
-        return ResponseEntity.badRequest().body(errors);
-    }
-
     @PutMapping("/addresses/{id}")
     public ResponseEntity<?> updateAddress(
         @Valid @RequestBody Address address,
@@ -175,7 +165,7 @@ public class AddressController {
         BindingResult result
     ) {
         if (result.hasErrors()) {
-            return this.validation(result);
+            return validation(result);
         }
         Optional<Address> updatedAddress = addressService.update(address, id);
         boolean isPresent = updatedAddress.isPresent();

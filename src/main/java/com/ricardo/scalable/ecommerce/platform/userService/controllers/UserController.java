@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import static com.ricardo.scalable.ecommerce.platform.libs_common.validation.RequestBodyValidation.*;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -75,16 +77,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(user));
     }
 
-    private ResponseEntity<?> validation(BindingResult result) {
-        Map<String, String> errors = new HashMap<>();
-
-        result.getFieldErrors()
-                .forEach(err -> {
-                    errors.put(err.getField(), "El campo " + err.getField() + " " + err.getDefaultMessage());
-                });
-        return ResponseEntity.badRequest().body(errors);
-    }
-
     @PutMapping("/{id}")
     public ResponseEntity<?> updateUser(
             @Valid @RequestBody UserUpdateInfoDto userUpdated,
@@ -92,7 +84,7 @@ public class UserController {
             BindingResult result
     ) {
         if (result.hasErrors()) {
-            return this.validation(result);
+            return validation(result);
         }
 
         Optional<User> userOptional = userService.update(userUpdated, id);
@@ -111,7 +103,7 @@ public class UserController {
             BindingResult result
     ) {
         if (result.hasErrors()) {
-            return this.validation(result);
+            return validation(result);
         }
         try {
             Optional<User> userOptional = userService.updatePassword(userUpdated, id);
