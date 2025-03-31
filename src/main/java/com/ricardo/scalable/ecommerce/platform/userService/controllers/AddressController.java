@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ricardo.scalable.ecommerce.platform.userService.entities.Address;
+import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Address;
 import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.AddressCreationDto;
 import com.ricardo.scalable.ecommerce.platform.userService.services.AddressService;
 import static com.ricardo.scalable.ecommerce.platform.libs_common.validation.RequestBodyValidation.*;
