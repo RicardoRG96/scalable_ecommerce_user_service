@@ -1,4 +1,4 @@
-package com.ricardo.scalable.ecommerce.platform.userService.entities;
+package com.ricardo.scalable.ecommerce.platform.userService.model.entities;
 
 import java.sql.Timestamp;
 

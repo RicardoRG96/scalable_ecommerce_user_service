@@ -9,7 +9,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.WishlistCreationDto;
+import com.ricardo.scalable.ecommerce.platform.userService.model.dto.WishlistCreationDto;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;

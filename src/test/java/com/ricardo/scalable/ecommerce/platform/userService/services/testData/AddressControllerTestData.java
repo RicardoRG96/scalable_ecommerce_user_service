@@ -6,7 +6,7 @@ import java.time.LocalDate;
 
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Address;
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.User;
-import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.AddressCreationDto;
+import com.ricardo.scalable.ecommerce.platform.userService.model.dto.AddressCreationDto;
 
 public class AddressControllerTestData {
 

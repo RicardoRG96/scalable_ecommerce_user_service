@@ -11,9 +11,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Role;
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.User;
-import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.UserRegisterDto;
-import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.UserUpdateInfoDto;
-import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.UserUpdatePasswordDto;
+import com.ricardo.scalable.ecommerce.platform.userService.model.dto.UserRegisterDto;
+import com.ricardo.scalable.ecommerce.platform.userService.model.dto.UserUpdateInfoDto;
+import com.ricardo.scalable.ecommerce.platform.userService.model.dto.UserUpdatePasswordDto;
 
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.*;
 

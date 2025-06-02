@@ -1,4 +1,4 @@
-package com.ricardo.scalable.ecommerce.platform.userService.repositories.dto;
+package com.ricardo.scalable.ecommerce.platform.userService.model.dto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;

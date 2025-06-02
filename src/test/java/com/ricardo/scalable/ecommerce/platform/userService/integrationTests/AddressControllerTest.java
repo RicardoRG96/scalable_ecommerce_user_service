@@ -19,7 +19,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Address;
-import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.AddressCreationDto;
+import com.ricardo.scalable.ecommerce.platform.userService.model.dto.AddressCreationDto;
 
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)

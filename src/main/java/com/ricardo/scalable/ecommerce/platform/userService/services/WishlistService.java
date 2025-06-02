@@ -3,8 +3,8 @@ package com.ricardo.scalable.ecommerce.platform.userService.services;
 import java.util.List;
 import java.util.Optional;
 
-import com.ricardo.scalable.ecommerce.platform.userService.entities.Wishlist;
-import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.WishlistCreationDto;
+import com.ricardo.scalable.ecommerce.platform.userService.model.dto.WishlistCreationDto;
+import com.ricardo.scalable.ecommerce.platform.userService.model.entities.Wishlist;
 
 public interface WishlistService {
 

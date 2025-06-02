@@ -12,11 +12,11 @@ import static org.mockito.Mockito.*;
 import java.util.List;
 import java.util.Optional;
 
-import com.ricardo.scalable.ecommerce.platform.userService.entities.Wishlist;
-import com.ricardo.scalable.ecommerce.platform.userService.repositories.ProductSkuRepository;
-import com.ricardo.scalable.ecommerce.platform.userService.repositories.UserRepository;
-import com.ricardo.scalable.ecommerce.platform.userService.repositories.WishlistRepository;
-import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.WishlistCreationDto;
+import com.ricardo.scalable.ecommerce.platform.userService.model.dto.WishlistCreationDto;
+import com.ricardo.scalable.ecommerce.platform.userService.model.entities.Wishlist;
+import com.ricardo.scalable.ecommerce.platform.userService.model.repositories.ProductSkuRepository;
+import com.ricardo.scalable.ecommerce.platform.userService.model.repositories.UserRepository;
+import com.ricardo.scalable.ecommerce.platform.userService.model.repositories.WishlistRepository;
 
 import static com.ricardo.scalable.ecommerce.platform.userService.services.testData.WishlistServiceTestData.*;
 import static com.ricardo.scalable.ecommerce.platform.userService.services.testData.UserServiceTestData.*;

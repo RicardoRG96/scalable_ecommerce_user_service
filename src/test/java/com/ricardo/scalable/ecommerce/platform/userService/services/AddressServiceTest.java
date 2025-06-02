@@ -15,9 +15,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Address;
-import com.ricardo.scalable.ecommerce.platform.userService.repositories.AddressRepository;
-import com.ricardo.scalable.ecommerce.platform.userService.repositories.UserRepository;
-import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.AddressCreationDto;
+import com.ricardo.scalable.ecommerce.platform.userService.model.dto.AddressCreationDto;
+import com.ricardo.scalable.ecommerce.platform.userService.model.repositories.AddressRepository;
+import com.ricardo.scalable.ecommerce.platform.userService.model.repositories.UserRepository;
 
 import static com.ricardo.scalable.ecommerce.platform.userService.services.testData.AddressServiceTestData.*;
 import static com.ricardo.scalable.ecommerce.platform.userService.services.testData.UserServiceTestData.*;

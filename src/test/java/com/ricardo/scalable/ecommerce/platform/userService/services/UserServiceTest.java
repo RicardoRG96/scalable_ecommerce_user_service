@@ -18,14 +18,13 @@ import static com.ricardo.scalable.ecommerce.platform.userService.services.testD
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Role;
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.User;
 import com.ricardo.scalable.ecommerce.platform.userService.exceptions.PasswordDoNotMatchException;
+import com.ricardo.scalable.ecommerce.platform.userService.model.dto.UserRegisterDto;
+import com.ricardo.scalable.ecommerce.platform.userService.model.dto.UserUpdateInfoDto;
+import com.ricardo.scalable.ecommerce.platform.userService.model.dto.UserUpdatePasswordDto;
+import com.ricardo.scalable.ecommerce.platform.userService.model.repositories.RoleRepository;
+import com.ricardo.scalable.ecommerce.platform.userService.model.repositories.UserRepository;
 
 import org.junit.jupiter.api.Test;
-
-import com.ricardo.scalable.ecommerce.platform.userService.repositories.RoleRepository;
-import com.ricardo.scalable.ecommerce.platform.userService.repositories.UserRepository;
-import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.UserRegisterDto;
-import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.UserUpdateInfoDto;
-import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.UserUpdatePasswordDto;
 
 @SpringBootTest
 public class UserServiceTest {

@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ricardo.scalable.ecommerce.platform.userService.entities.Wishlist;
-import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.WishlistCreationDto;
+import com.ricardo.scalable.ecommerce.platform.userService.model.dto.WishlistCreationDto;
+import com.ricardo.scalable.ecommerce.platform.userService.model.entities.Wishlist;
 import com.ricardo.scalable.ecommerce.platform.userService.services.WishlistService;
 import static com.ricardo.scalable.ecommerce.platform.libs_common.validation.RequestBodyValidation.*;
 

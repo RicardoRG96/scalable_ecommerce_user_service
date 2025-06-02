@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Address;
-import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.AddressCreationDto;
+import com.ricardo.scalable.ecommerce.platform.userService.model.dto.AddressCreationDto;
 
 public interface AddressService {
 

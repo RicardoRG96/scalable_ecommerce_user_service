@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Address;
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.User;
-import com.ricardo.scalable.ecommerce.platform.userService.repositories.AddressRepository;
-import com.ricardo.scalable.ecommerce.platform.userService.repositories.UserRepository;
-import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.AddressCreationDto;
+import com.ricardo.scalable.ecommerce.platform.userService.model.dto.AddressCreationDto;
+import com.ricardo.scalable.ecommerce.platform.userService.model.repositories.AddressRepository;
+import com.ricardo.scalable.ecommerce.platform.userService.model.repositories.UserRepository;
 
 @Service
 public class AddressServiceImpl implements AddressService {

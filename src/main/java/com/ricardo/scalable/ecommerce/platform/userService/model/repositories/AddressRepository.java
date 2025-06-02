@@ -1,4 +1,4 @@
-package com.ricardo.scalable.ecommerce.platform.userService.repositories;
+package com.ricardo.scalable.ecommerce.platform.userService.model.repositories;
 
 import java.util.List;
 import java.util.Optional;

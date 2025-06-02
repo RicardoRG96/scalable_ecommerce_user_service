@@ -5,8 +5,8 @@ import java.util.Optional;
 
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.ProductSku;
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.User;
-import com.ricardo.scalable.ecommerce.platform.userService.entities.Wishlist;
-import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.WishlistCreationDto;
+import com.ricardo.scalable.ecommerce.platform.userService.model.dto.WishlistCreationDto;
+import com.ricardo.scalable.ecommerce.platform.userService.model.entities.Wishlist;
 
 import static com.ricardo.scalable.ecommerce.platform.userService.services.testData.UserServiceTestData.*;
 import static com.ricardo.scalable.ecommerce.platform.userService.services.testData.productSku.ProductSkuTestData.*;

@@ -3,11 +3,12 @@ package com.ricardo.scalable.ecommerce.platform.userService.services;
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Role;
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.User;
 import com.ricardo.scalable.ecommerce.platform.userService.exceptions.PasswordDoNotMatchException;
-import com.ricardo.scalable.ecommerce.platform.userService.repositories.RoleRepository;
-import com.ricardo.scalable.ecommerce.platform.userService.repositories.UserRepository;
-import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.UserRegisterDto;
-import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.UserUpdateInfoDto;
-import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.UserUpdatePasswordDto;
+import com.ricardo.scalable.ecommerce.platform.userService.model.dto.UserRegisterDto;
+import com.ricardo.scalable.ecommerce.platform.userService.model.dto.UserUpdateInfoDto;
+import com.ricardo.scalable.ecommerce.platform.userService.model.dto.UserUpdatePasswordDto;
+import com.ricardo.scalable.ecommerce.platform.userService.model.repositories.RoleRepository;
+import com.ricardo.scalable.ecommerce.platform.userService.model.repositories.UserRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

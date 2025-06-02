@@ -8,8 +8,8 @@ import java.util.List;
 
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Role;
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.User;
-import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.UserRegisterDto;
-import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.UserUpdateInfoDto;
+import com.ricardo.scalable.ecommerce.platform.userService.model.dto.UserRegisterDto;
+import com.ricardo.scalable.ecommerce.platform.userService.model.dto.UserUpdateInfoDto;
 
 public class UserControllerTestData {
 

@@ -9,11 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.ProductSku;
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.User;
-import com.ricardo.scalable.ecommerce.platform.userService.entities.Wishlist;
-import com.ricardo.scalable.ecommerce.platform.userService.repositories.ProductSkuRepository;
-import com.ricardo.scalable.ecommerce.platform.userService.repositories.UserRepository;
-import com.ricardo.scalable.ecommerce.platform.userService.repositories.WishlistRepository;
-import com.ricardo.scalable.ecommerce.platform.userService.repositories.dto.WishlistCreationDto;
+import com.ricardo.scalable.ecommerce.platform.userService.model.dto.WishlistCreationDto;
+import com.ricardo.scalable.ecommerce.platform.userService.model.entities.Wishlist;
+import com.ricardo.scalable.ecommerce.platform.userService.model.repositories.ProductSkuRepository;
+import com.ricardo.scalable.ecommerce.platform.userService.model.repositories.UserRepository;
+import com.ricardo.scalable.ecommerce.platform.userService.model.repositories.WishlistRepository;
 
 @Service
 public class WishlistServiceImpl implements WishlistService {
