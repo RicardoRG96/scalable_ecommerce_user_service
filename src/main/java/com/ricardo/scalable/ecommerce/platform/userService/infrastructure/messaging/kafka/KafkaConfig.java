@@ -12,6 +12,7 @@ import org.springframework.kafka.core.ProducerFactory;
 
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ser.std.StringSerializer;
+import com.ricardo.scalable.ecommerce.platform.libs_common.events.UserBirthdayEvent;
 import com.ricardo.scalable.ecommerce.platform.libs_common.events.UserRegisteredEvent;
 
 @Configuration
@@ -26,6 +27,17 @@ public class KafkaConfig {
     @Bean
     KafkaTemplate<String, UserRegisteredEvent> userRegisteredKafkaTemplate() {
         return new KafkaTemplate<>(userRegisteredProducerFactory());
+    }
+
+    @Bean
+    ProducerFactory<String, UserBirthdayEvent> userBirthdayProducerFactory() {
+        Map<String, Object> props = baseProducerConfig();
+        return new DefaultKafkaProducerFactory<>(props);
+    }
+
+    @Bean
+    KafkaTemplate<String, UserBirthdayEvent> userBirthdayKafkaTemplate() {
+        return new KafkaTemplate<>(userBirthdayProducerFactory());
     }
 
     private Map<String, Object> baseProducerConfig() {
