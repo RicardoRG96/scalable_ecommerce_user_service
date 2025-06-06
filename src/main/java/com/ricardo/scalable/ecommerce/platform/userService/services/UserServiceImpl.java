@@ -2,7 +2,10 @@ package com.ricardo.scalable.ecommerce.platform.userService.services;
 
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Role;
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.User;
+import com.ricardo.scalable.ecommerce.platform.libs_common.events.UserBirthdayEvent;
+import com.ricardo.scalable.ecommerce.platform.libs_common.events.UserRegisteredEvent;
 import com.ricardo.scalable.ecommerce.platform.userService.exceptions.PasswordDoNotMatchException;
+import com.ricardo.scalable.ecommerce.platform.userService.messaging.EventPublisher;
 import com.ricardo.scalable.ecommerce.platform.userService.model.dto.UserRegisterDto;
 import com.ricardo.scalable.ecommerce.platform.userService.model.dto.UserUpdateInfoDto;
 import com.ricardo.scalable.ecommerce.platform.userService.model.dto.UserUpdatePasswordDto;
@@ -14,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +33,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private EventPublisher<UserRegisteredEvent> userRegisteredEventPublisher;
+
+    @Autowired
+    private EventPublisher<UserBirthdayEvent> userBirthdayEventPublisher;
 
     @Override
     @Transactional(readOnly = true)
@@ -57,19 +67,33 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public User save(UserRegisterDto user) {
-        User userEntity = new User();
-        userEntity.setAvatar(user.getAvatar());
-        userEntity.setFirstName(user.getFirstName());
-        userEntity.setLastName(user.getLastName());
-        userEntity.setUsername(user.getUsername());
-        userEntity.setEmail(user.getEmail());
-        userEntity.setPassword(passwordEncoder.encode(user.getPassword()));
-        userEntity.setBirthDate(user.getBirthDate());
-        userEntity.setPhoneNumber(user.getPhoneNumber());
+        User userToCreate = new User();
+        userToCreate.setAvatar(user.getAvatar());
+        userToCreate.setFirstName(user.getFirstName());
+        userToCreate.setLastName(user.getLastName());
+        userToCreate.setUsername(user.getUsername());
+        userToCreate.setEmail(user.getEmail());
+        userToCreate.setPassword(passwordEncoder.encode(user.getPassword()));
+        userToCreate.setBirthDate(user.getBirthDate());
+        userToCreate.setPhoneNumber(user.getPhoneNumber());
+        userToCreate.setRoles(getRoles(user));
+        userToCreate.setEnabled(true);
+        
+        User savedUser = userRepository.save(userToCreate);
 
-        userEntity.setRoles(getRoles(user));
-        userEntity.setEnabled(true);
-        return userRepository.save(userEntity);
+        publishUserRegisteredEvent(savedUser);
+        
+        return savedUser;
+    }
+
+    private void publishUserRegisteredEvent(User user) {
+        UserRegisteredEvent userRegisteredEvent = new UserRegisteredEvent();
+        userRegisteredEvent.setUserId(user.getId());
+        userRegisteredEvent.setEmail(user.getEmail());
+        userRegisteredEvent.setName(user.getFirstName() + " " + user.getLastName());
+        userRegisteredEvent.setRegisteredAt(LocalDateTime.now());
+
+        userRegisteredEventPublisher.publish("user-registered-topic", userRegisteredEvent);
     }
 
     @Override
