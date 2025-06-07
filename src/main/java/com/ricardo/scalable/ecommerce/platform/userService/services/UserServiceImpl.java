@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -94,6 +95,21 @@ public class UserServiceImpl implements UserService {
         userRegisteredEvent.setRegisteredAt(LocalDateTime.now());
 
         userRegisteredEventPublisher.publish("user-registered-topic", userRegisteredEvent);
+    }
+
+    @Override
+    public void notifyUserBirthdays() {
+       List<User> birthdayUsers = userRepository.findByBirthDate(LocalDate.now());
+
+        for (User user : birthdayUsers) {
+            UserBirthdayEvent birthdayEvent = new UserBirthdayEvent();
+            birthdayEvent.setUserId(user.getId());
+            birthdayEvent.setName(user.getFirstName() + " " + user.getLastName());
+            birthdayEvent.setEmail(user.getEmail());
+            birthdayEvent.setBirthday(user.getBirthDate());
+
+            userBirthdayEventPublisher.publish("user-birthday-topic", birthdayEvent);
+        }
     }
 
     @Override

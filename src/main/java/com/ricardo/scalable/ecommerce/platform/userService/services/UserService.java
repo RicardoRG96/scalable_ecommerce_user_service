@@ -20,6 +20,8 @@ public interface UserService {
 
     User save(UserRegisterDto user);
 
+    void notifyUserBirthdays();
+
     Optional<User> update(UserUpdateInfoDto userUpdated, Long id);
 
     Optional<User> updatePassword(UserUpdatePasswordDto userUpdated, Long id) throws PasswordDoNotMatchException;
