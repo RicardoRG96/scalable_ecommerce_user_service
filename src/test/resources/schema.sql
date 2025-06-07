@@ -1,5 +1,48 @@
 SET NON_KEYWORDS VALUE;
 
+CREATE TABLE IF NOT EXISTS users (
+	id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    avatar VARCHAR(100),
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    username VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    password VARCHAR(100) NOT NULL,
+    birth_date DATE,
+    phone_number VARCHAR(20),
+    enabled BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS roles (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS users_roles (
+    user_id BIGINT NOT NULL,
+    role_id BIGINT NOT NULL,
+    PRIMARY KEY (user_id, role_id),
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (role_id) REFERENCES roles(id)
+);
+
+CREATE TABLE IF NOT EXISTS addresses (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT,
+    title VARCHAR(200),
+    address_line_1 VARCHAR(255),
+    address_line_2 VARCHAR(255),
+    country VARCHAR(200),
+    city VARCHAR(200),
+    commune VARCHAR(200),
+    postal_code VARCHAR(200),
+    landmark VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
 CREATE TABLE IF NOT EXISTS categories (
 	id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -55,4 +98,14 @@ CREATE TABLE IF NOT EXISTS product_skus (
     FOREIGN KEY (product_id) REFERENCES products(id),
     FOREIGN KEY (size_attribute_id) REFERENCES product_attributes(id),
     FOREIGN KEY (color_attribute_id) REFERENCES product_attributes(id)
+);
+
+CREATE TABLE IF NOT EXISTS wishlists (
+	id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT,
+    product_sku_id BIGINT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (product_sku_id) REFERENCES product_skus(id)
 );

@@ -5,6 +5,7 @@ import com.ricardo.scalable.ecommerce.platform.libs_common.entities.User;
 import org.springframework.data.repository.CrudRepository;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository extends CrudRepository<User, Long> {
@@ -13,6 +14,6 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     Optional<User> findByEmail(String email);
 
-    Optional<User> findByBirthDate(LocalDate birthDate);
+    Optional<List<User>> findByBirthDate(LocalDate birthDate);
 
 }

@@ -10,7 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @EnableFeignClients
 @SpringBootApplication
-@EntityScan({"com.ricardo.scalable.ecommerce.platform.libs_common.entities", "com.ricardo.scalable.ecommerce.platform.userService.entities"})
+@EntityScan({"com.ricardo.scalable.ecommerce.platform.libs_common.entities", "com.ricardo.scalable.ecommerce.platform.userService.model.entities"})
 public class UserServiceApplication {
 
 	@Bean
