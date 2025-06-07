@@ -94,7 +94,7 @@ public class UserServiceImpl implements UserService {
         userRegisteredEvent.setName(user.getFirstName() + " " + user.getLastName());
         userRegisteredEvent.setRegisteredAt(LocalDateTime.now());
 
-        userRegisteredEventPublisher.publish("user-registered-topic", userRegisteredEvent);
+        userRegisteredEventPublisher.publish("user-registered", userRegisteredEvent);
     }
 
     @Override
@@ -108,7 +108,7 @@ public class UserServiceImpl implements UserService {
             birthdayEvent.setEmail(user.getEmail());
             birthdayEvent.setBirthday(user.getBirthDate());
 
-            userBirthdayEventPublisher.publish("user-birthday-topic", birthdayEvent);
+            userBirthdayEventPublisher.publish("user-birthday", birthdayEvent);
         }
     }
 
