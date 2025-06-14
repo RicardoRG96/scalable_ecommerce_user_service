@@ -7,6 +7,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 import java.time.LocalDate;
@@ -17,7 +18,10 @@ import java.util.stream.Collectors;
 import static com.ricardo.scalable.ecommerce.platform.userService.services.testData.UserServiceTestData.*;
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.Role;
 import com.ricardo.scalable.ecommerce.platform.libs_common.entities.User;
+import com.ricardo.scalable.ecommerce.platform.libs_common.events.UserBirthdayEvent;
+import com.ricardo.scalable.ecommerce.platform.libs_common.events.UserRegisteredEvent;
 import com.ricardo.scalable.ecommerce.platform.userService.exceptions.PasswordDoNotMatchException;
+import com.ricardo.scalable.ecommerce.platform.userService.messaging.EventPublisher;
 import com.ricardo.scalable.ecommerce.platform.userService.model.dto.UserRegisterDto;
 import com.ricardo.scalable.ecommerce.platform.userService.model.dto.UserUpdateInfoDto;
 import com.ricardo.scalable.ecommerce.platform.userService.model.dto.UserUpdatePasswordDto;
@@ -30,16 +34,22 @@ import org.junit.jupiter.api.Test;
 public class UserServiceTest {
 
     @MockitoBean
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @MockitoBean
-    RoleRepository roleRepository;
+    private RoleRepository roleRepository;
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Autowired
-    PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
+
+    @MockitoBean
+    private EventPublisher<UserRegisteredEvent> userRegisteredPublisher;
+
+    @MockitoBean
+    private EventPublisher<UserBirthdayEvent> userBirthdayPublisher;
 
     @Test
     void testFindById() {
@@ -156,6 +166,24 @@ public class UserServiceTest {
         );
 
         verify(userRepository).save(any());
+        verify(userRegisteredPublisher).publish(eq("user-registered"), any(UserRegisteredEvent.class));
+    }
+
+    @Test
+    void notifyUserBirthdays_whenThereAreBirthdayUsers() {
+        User user1 = createUser001().orElseThrow();
+        User user2 = createUser002().orElseThrow();
+        user1.setBirthDate(LocalDate.now());
+        user2.setBirthDate(LocalDate.now());
+
+        LocalDate today = LocalDate.now();
+
+        when(userRepository.findByBirthdayMonthAndDay(today.getMonthValue(), today.getDayOfMonth()))
+            .thenReturn(List.of(user1, user2));
+
+        userService.notifyUserBirthdays();
+
+        verify(userBirthdayPublisher, times(2)).publish(eq("user-birthday"), any(UserBirthdayEvent.class));
     }
 
     @Test
