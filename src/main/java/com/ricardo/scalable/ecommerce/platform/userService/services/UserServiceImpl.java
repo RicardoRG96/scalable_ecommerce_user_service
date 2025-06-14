@@ -12,8 +12,6 @@ import com.ricardo.scalable.ecommerce.platform.userService.model.dto.UserUpdateP
 import com.ricardo.scalable.ecommerce.platform.userService.model.repositories.RoleRepository;
 import com.ricardo.scalable.ecommerce.platform.userService.model.repositories.UserRepository;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -42,8 +40,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private EventPublisher<UserBirthdayEvent> userBirthdayEventPublisher;
-
-    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Override
     @Transactional(readOnly = true)
@@ -106,8 +102,6 @@ public class UserServiceImpl implements UserService {
         LocalDate today = LocalDate.now();
         List<User> birthdayUsers = 
             userRepository.findByBirthdayMonthAndDay(today.getMonthValue(), today.getDayOfMonth());
-
-        logger.info("User : {}", birthdayUsers.get(0).getUsername());
 
         for (User user : birthdayUsers) {
             UserBirthdayEvent birthdayEvent = new UserBirthdayEvent();

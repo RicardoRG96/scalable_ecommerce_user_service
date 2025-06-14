@@ -16,7 +16,7 @@ public class BirthdayJob extends ScheduledJob {
         this.userService = userService;
     }
 
-    @Scheduled(cron = "0 8 8 * * *")
+    @Scheduled(cron = "0 0 7 * * *")
     public void scheduled() {
         runSafely();
     }
