@@ -1,8 +1,6 @@
 package com.ricardo.scalable.ecommerce.platform.userService.repositories;
 
 import static org.junit.jupiter.api.Assertions.*;
-
-import java.time.LocalDate;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -22,7 +20,7 @@ public class UserRepositoryTest {
 
     @Test
     void findByBirthDate_whenBirthDateExists_thenReturnUsers() {
-        List<User> users = userRepository.findByBirthDate(LocalDate.of(1996, 10, 04));
+        List<User> users = userRepository.findByBirthdayMonthAndDay(10, 4);
 
         assertAll(
             () -> assertNotNull(users, "Users should not be null"),
