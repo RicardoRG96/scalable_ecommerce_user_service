@@ -41,6 +41,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private EventPublisher<UserBirthdayEvent> userBirthdayEventPublisher;
 
+    @Autowired
+    private VerificationTokenService verificationTokenService;
+
     @Override
     @Transactional(readOnly = true)
     public Optional<User> findById(Long id) {
@@ -79,6 +82,8 @@ public class UserServiceImpl implements UserService {
         userToCreate.setPhoneNumber(user.getPhoneNumber());
         userToCreate.setRoles(getRoles(user));
         userToCreate.setEnabled(false);
+
+        verificationTokenService.createVerificationToken(userToCreate);
         
         User savedUser = userRepository.save(userToCreate);
 
@@ -92,6 +97,7 @@ public class UserServiceImpl implements UserService {
         userRegisteredEvent.setUserId(user.getId());
         userRegisteredEvent.setEmail(user.getEmail());
         userRegisteredEvent.setName(user.getFirstName() + " " + user.getLastName());
+        userRegisteredEvent.setToken(user.getVerificationToken());
         userRegisteredEvent.setRegisteredAt(LocalDateTime.now());
 
         userRegisteredEventPublisher.publish("user-registered", userRegisteredEvent);
