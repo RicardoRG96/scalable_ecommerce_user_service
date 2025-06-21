@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService {
         userToCreate.setBirthDate(user.getBirthDate());
         userToCreate.setPhoneNumber(user.getPhoneNumber());
         userToCreate.setRoles(getRoles(user));
-        userToCreate.setEnabled(true);
+        userToCreate.setEnabled(false);
         
         User savedUser = userRepository.save(userToCreate);
 

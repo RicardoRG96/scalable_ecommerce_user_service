@@ -23,4 +23,6 @@ public interface UserRepository extends CrudRepository<User, Long> {
     """, nativeQuery = true)
     List<User> findByBirthdayMonthAndDay(@Param("month") int month, @Param("day") int day);
 
+    Optional<User> findByVerificationToken(String verificationToken);
+
 }
