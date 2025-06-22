@@ -6,6 +6,8 @@ import com.ricardo.scalable.ecommerce.platform.userService.model.dto.UserRegiste
 import com.ricardo.scalable.ecommerce.platform.userService.model.dto.UserUpdateInfoDto;
 import com.ricardo.scalable.ecommerce.platform.userService.model.dto.UserUpdatePasswordDto;
 import com.ricardo.scalable.ecommerce.platform.userService.services.UserService;
+import com.ricardo.scalable.ecommerce.platform.userService.services.VerificationTokenService;
+
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +26,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private VerificationTokenService verificationTokenService;
 
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
@@ -61,6 +66,14 @@ public class UserController {
     @GetMapping
     public ResponseEntity<Iterable<User>> getAllUsers() {
         return ResponseEntity.ok(userService.findAll());
+    }
+
+    @GetMapping("/verify-email")
+    public ResponseEntity<Map<String, String>> verifyEmail(@RequestParam String token) {
+        verificationTokenService.validateVerificationToken(token);
+        Map<String, String> response = Map.of("message", "Email verified successfully");
+
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/register")

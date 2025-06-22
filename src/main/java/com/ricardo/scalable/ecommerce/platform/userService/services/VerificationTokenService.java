@@ -20,12 +20,14 @@ public class VerificationTokenService {
         user.setVerificationToken(token);
     }
 
-    public void validateVerificationToken(String token) {
+    public User validateVerificationToken(String token) {
         User user = userRepository.findByVerificationToken(token)
                 .orElseThrow(() -> new VerificationTokenNotFoundException("Invalid verification token"));
     
         user.setEnabled(true);
         userRepository.save(user);
+
+        return user;
     }
 
 }
