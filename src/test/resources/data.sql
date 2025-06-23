@@ -2,14 +2,14 @@ SET NON_KEYWORDS VALUE;
 
 --users
 
-INSERT INTO users (avatar, first_name, last_name, username, email, password, birth_date, phone_number, enabled)
-    VALUES ('avatar1.png', 'alejandro', 'retamal', 'alejandro10', 'alejandro@gmail.com', 'alejandro12345', DATE '1996-10-04', '+56952419637', true);
+INSERT INTO users (avatar, first_name, last_name, username, email, password, birth_date, phone_number, verification_token, enabled)
+    VALUES ('avatar1.png', 'alejandro', 'retamal', 'alejandro10', 'alejandro@gmail.com', 'alejandro12345', DATE '1996-10-04', '+56952419637', 'e2ed4405-445d-4299-a75d-23ee511f448e', true);
 
-INSERT INTO users (avatar, first_name, last_name, username, email, password, birth_date, phone_number, enabled)
-    VALUES ('avatar2.png', 'ester', 'guevara', 'ester17', 'ester@gmail.com', 'ester12345', DATE '1994-01-17', '+56932189745', true);
+INSERT INTO users (avatar, first_name, last_name, username, email, password, birth_date, phone_number, verification_token, enabled)
+    VALUES ('avatar2.png', 'ester', 'guevara', 'ester17', 'ester@gmail.com', 'ester12345', DATE '1994-01-17', '+56932189745', 'e2ed4405-445d-4299-a75d-23euipok594p', true);
 
-INSERT INTO users (avatar, first_name, last_name, username, email, password, birth_date, phone_number, enabled)
-    VALUES ('avatar3.png', 'pepe', 'pepon', 'pepe58', 'pepe@gmail.com', 'pepe12345', DATE '1992-12-26', '+56931258759', true);
+INSERT INTO users (avatar, first_name, last_name, username, email, password, birth_date, phone_number, verification_token, enabled)
+    VALUES ('avatar3.png', 'pepe', 'pepon', 'pepe58', 'pepe@gmail.com', 'pepe12345', DATE '1992-12-26', '+56931258759', 'e2ed4405-445d-4299-a75d-2opdkye259d8', true);
 
 
 -- roles
