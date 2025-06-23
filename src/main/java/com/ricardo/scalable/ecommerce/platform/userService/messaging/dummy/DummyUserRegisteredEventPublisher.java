@@ -1,5 +1,6 @@
 package com.ricardo.scalable.ecommerce.platform.userService.messaging.dummy;
 
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
@@ -7,6 +8,7 @@ import com.ricardo.scalable.ecommerce.platform.libs_common.events.UserRegistered
 import com.ricardo.scalable.ecommerce.platform.userService.messaging.EventPublisher;
 
 @Profile("test")
+@Primary
 @Component
 public class DummyUserRegisteredEventPublisher implements EventPublisher<UserRegisteredEvent> {
 

@@ -193,7 +193,7 @@ public class UserControllerTest {
                             () -> assertEquals("mateo10", json.path("username").asText()),
                             () -> assertNotNull(json.path("password").asText()),
                             () -> assertEquals("+56912345678", json.path("phoneNumber").asText()),
-                            () -> assertTrue(json.path("enabled").asBoolean()),
+                            () -> assertFalse(json.path("enabled").asBoolean()),
                             () -> assertFalse(json.path("admin").asBoolean()),
                             () -> assertNotNull(json.path("roles"))
                         );
@@ -241,7 +241,7 @@ public class UserControllerTest {
                             () -> assertEquals("pepa25", json.path("username").asText()),
                             () -> assertNotNull(json.path("password").asText()),
                             () -> assertEquals("+56998765432", json.path("phoneNumber").asText()),
-                            () -> assertTrue(json.path("enabled").asBoolean()),
+                            () -> assertFalse(json.path("enabled").asBoolean()),
                             () -> assertFalse(json.path("admin").asBoolean()),
                             () -> assertNotNull(json.path("roles"))
                         );
