@@ -581,6 +581,40 @@ public class UserControllerTest {
     }
 
     @Test
+    @Order(29)
+    void verifyEmail_whenTokenIsValid_shouldRespondWithOk() {
+        String existingTokenOfUser1 = "e2ed4405-445d-4299-a75d-23ee511f448e";
+
+        client.get()
+                .uri("/verify-email?token=" + existingTokenOfUser1)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .consumeWith(response -> {
+                    try {
+                        JsonNode json = objectMapper.readTree(response.getResponseBody());
+                        assertAll(
+                            () -> assertNotNull(json),
+                            () -> assertEquals("Email verified successfully", json.path("message").asText())
+                        );
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                });
+    }
+
+    @Test
+    @Order(30)
+    void verifyEmail_whenTokenIsInvalid_shouldRespondWithNotFound() {
+        String invalidToken = "invalid-token";
+        client.get()
+                .uri("/verify-email?token=" + invalidToken)
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
     void testProfile() {
         assertArrayEquals(new String[]{"test"}, env.getActiveProfiles());
     }
