@@ -15,11 +15,11 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     Optional<User> findByEmail(String email);
 
-
     @Query(value = """
         SELECT * FROM users 
         WHERE MONTH(birth_date) = :month 
         AND DAY(birth_date) = :day
+        AND enabled = TRUE
     """, nativeQuery = true)
     List<User> findByBirthdayMonthAndDay(@Param("month") int month, @Param("day") int day);
 
