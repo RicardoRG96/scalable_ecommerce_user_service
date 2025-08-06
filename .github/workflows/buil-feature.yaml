@@ -1,0 +1,35 @@
+name: build and test feature branch
+on: 
+  pull_request:
+    branches: [develop]
+    types: [opened, reopened]
+jobs:
+  build-feature:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Pull and checkout from git repository
+        run: |
+          echo "Pulling and checking out from git repository"
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '21'
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Build with Maven
+        run: |
+          mvn clean test package
+          echo "Build and tests completed successfully"
