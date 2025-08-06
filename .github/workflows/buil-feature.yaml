@@ -13,7 +13,7 @@ jobs:
 
       - name: Pull and checkout from git repository
         run: |
-          echo "Pulling and checking out from git repository"
+          echo "Pulling and checking out from git repository" 
 
       - name: Set up JDK 21
         uses: actions/setup-java@v4
