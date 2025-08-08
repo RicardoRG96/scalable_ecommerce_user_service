@@ -21,6 +21,8 @@ jobs:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '21'
 
+      # indica a maven las credenciales para acceder a los paquetes de GitHub
+      # y asi poder utilizar la dependecia de libs-common
       - name: Set up Maven settings.xml for GitHub Packages
         run: |
           mkdir -p ~/.m2
