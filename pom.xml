@@ -134,6 +134,11 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
+		<repository>
+			<id>github</id>
+			<name>GitHub Packages</name>
+			<url>https://maven.pkg.github.com/RicardoRG96/scalable_ecommerce_libs_common</url>
+		</repository>
 	</repositories>
 
 </project>
